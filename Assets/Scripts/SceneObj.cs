@@ -46,6 +46,13 @@ public class SceneObj : MonoBehaviour
             Common.Utils.SetActiveLayer("Quiz");
             showQuiz = true;
         }
+        else if (hasQuiz && showQuiz && Common.Utils.ClickedAnywhereOut(relatedQuizArea))
+        {
+            itemsBox.gameObject.SetActive(true);
+            relatedQuiz.SetActive(false);
+            Common.Utils.SetActiveLayer("Default");
+            showQuiz = false;
+        }
 
         if (pickable && Common.Utils.ClickedOn(this.gameObject))
         {
@@ -58,13 +65,7 @@ public class SceneObj : MonoBehaviour
 
     private void LateUpdate()
     {
-        if (hasQuiz && showQuiz && Common.Utils.ClickedAnywhereOut(relatedQuizArea))
-        {
-            itemsBox.gameObject.SetActive(true);
-            relatedQuiz.SetActive(false);
-            Common.Utils.SetActiveLayer("Default");
-            showQuiz = false;
-        }
+        
     }
     public void QuizResolved()
     {

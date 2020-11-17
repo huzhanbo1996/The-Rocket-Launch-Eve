@@ -10,9 +10,10 @@ public class QuizBottleLogic : MonoBehaviour
     public GameObject mButtomFlush;
     public GameObject mButtunLine;
     public GameObject mBandPrefab;
+    public GameObject mSceneObj;
     public bool mResolved;
 
-    private string mResourcePath = "Quiz1";
+    private string mResourcePath = "QuizBottle";
     private Vector3 mButtun;
     private Vector3 mCurrPosition;
     private List<GameObject> mBottleBandsKeeper = new List<GameObject>();
@@ -82,7 +83,7 @@ public class QuizBottleLogic : MonoBehaviour
             if(i == mBottleBandsKeeper.Count)
             {
                 mResolved = true;
-                this.transform.parent.GetComponent<SceneObj>().QuizResolved();
+                mSceneObj.GetComponent<SceneObj>().QuizResolved();
             }
         }
     }
