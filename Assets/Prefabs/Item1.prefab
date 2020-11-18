@@ -97,6 +97,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   picIdle: {fileID: 21300000, guid: 993362d5f34bd264bbc64673f8572d7b, type: 3}
   picPicked: {fileID: 21300000, guid: c721404fe024c0e489842b7d3eab0586, type: 3}
+  objToGive: {fileID: 0}
 --- !u!61 &8125254874093325824
 BoxCollider2D:
   m_ObjectHideFlags: 0

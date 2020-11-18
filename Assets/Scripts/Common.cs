@@ -26,6 +26,10 @@ namespace Common
                     }
                     if (i == col.Length) return true;
                 }
+
+                //Collider2D col = Physics2D.OverlapPoint(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+                //if (col == null) return true;
+                //if (col.gameObject != obj) return true;
             }
             return false;
         }
@@ -35,11 +39,14 @@ namespace Common
             Debug.Assert(obj.GetComponent<Collider2D>() != null);
             if (Input.GetMouseButtonDown(0))
             {
-                Collider2D[] col = Physics2D.OverlapPointAll(Camera.main.ScreenToWorldPoint(Input.mousePosition), activeLayers);
-                foreach(var c in col)
-                {
-                    if (c.gameObject == obj) return true;
-                }
+                //Collider2D[] col = Physics2D.OverlapPointAll(Camera.main.ScreenToWorldPoint(Input.mousePosition), activeLayers);
+                //foreach(var c in col)
+                //{
+                //    if (c.gameObject == obj) return true;
+                //}
+                Collider2D col = Physics2D.OverlapPoint(Camera.main.ScreenToWorldPoint(Input.mousePosition), activeLayers);
+                if (col == null) return false;
+                if (col.gameObject == obj) return true;
             }
             return false;
         }

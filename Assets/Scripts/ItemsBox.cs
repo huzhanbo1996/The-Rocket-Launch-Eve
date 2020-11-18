@@ -7,6 +7,7 @@ public class ItemsBox : MonoBehaviour
 {
     public float sizeOfItemX;
     public float sizeOfItemY;
+    public List<GameObject> objPickedUp = new List<GameObject>();
 
     private int mStorageX;
     private int mStorageY;
@@ -35,7 +36,7 @@ public class ItemsBox : MonoBehaviour
         
     }
 
-    public bool AddItem(GameObject it)
+    public bool AddItem(GameObject it, GameObject objToGive, GameObject objCarried)
     {
         Debug.Log("AddItem");
         Debug.Assert(it != null);
@@ -44,6 +45,8 @@ public class ItemsBox : MonoBehaviour
             if (mInventory[i] == null)
             {
                 var obj = Instantiate(it);
+                obj.GetComponent<Item>().objToGive = objToGive;
+                obj.GetComponent<Item>().objCarried = objCarried;
                 obj.transform.parent = this.transform;
                 var col = i / mStorageY;
                 var raw = i % mStorageY;
@@ -62,6 +65,10 @@ public class ItemsBox : MonoBehaviour
     public bool RemoveItem(GameObject it)
     {
         Debug.Assert(it != null);
+        if(objPickedUp.Contains(it))
+        {
+            objPickedUp.Remove(it);
+        }
         for (int i = 0; i < mInventory.Length; i++)
         {
             if (mInventory[i] == it)

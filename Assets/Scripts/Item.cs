@@ -6,6 +6,8 @@ public class Item : MonoBehaviour
 {
     public Sprite picIdle;
     public Sprite picPicked;
+    public GameObject objToGive;
+    public GameObject objCarried;
 
     private SpriteRenderer mSRender;
     // Start is called before the first frame update
@@ -18,9 +20,12 @@ public class Item : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        var itemsBox = this.transform.parent.GetComponent<ItemsBox>();
+        //Debug.Assert(itemsBox != null);
         if (Common.Utils.ClickedOn(this.gameObject))
         {
             mSRender.sprite = picPicked;
+            if (itemsBox != null) itemsBox.objPickedUp.Add(this.gameObject);
         }
         if (Input.GetMouseButtonDown(0))
         {
@@ -28,6 +33,7 @@ public class Item : MonoBehaviour
             if (col.Length == 0)
             {
                 mSRender.sprite = picIdle;
+                if (itemsBox != null) itemsBox.objPickedUp.Remove(this.gameObject);
             }
             else
             {
@@ -36,7 +42,11 @@ public class Item : MonoBehaviour
                 {
                     if (col[i].gameObject == this.gameObject) break;
                 }
-                if (i == col.Length) mSRender.sprite = picIdle;
+                if (i == col.Length)
+                {
+                    if (itemsBox != null) itemsBox.objPickedUp.Remove(this.gameObject);
+                    mSRender.sprite = picIdle;
+                }
             }
         }
     }
