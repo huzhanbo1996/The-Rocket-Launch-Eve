@@ -98,8 +98,12 @@ MonoBehaviour:
   pickable: 1
   draguable: 0
   visiable: 1
+  hasQuiz: 0
+  receiveItems: 0
   relatedItem: {fileID: 0}
-  itemsBox: {fileID: 0}
+  relatedQuiz: {fileID: 0}
+  objToGive: {fileID: 0}
+  objCarried: {fileID: 0}
 --- !u!61 &4993016727897330724
 BoxCollider2D:
   m_ObjectHideFlags: 0

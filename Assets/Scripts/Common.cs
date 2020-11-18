@@ -46,7 +46,10 @@ namespace Common
                 //}
                 Collider2D col = Physics2D.OverlapPoint(Camera.main.ScreenToWorldPoint(Input.mousePosition), activeLayers);
                 if (col == null) return false;
-                if (col.gameObject == obj) return true;
+                if (col.gameObject == obj)
+                {
+                    return true;
+                }
             }
             return false;
         }
