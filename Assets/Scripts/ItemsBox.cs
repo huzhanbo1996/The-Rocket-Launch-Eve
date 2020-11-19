@@ -36,7 +36,7 @@ public class ItemsBox : MonoBehaviour
         
     }
 
-    public bool AddItem(GameObject it, GameObject objToGive, GameObject objCarried)
+    public bool AddItem(GameObject it, Sprite picIdle, Sprite picPicked, GameObject objToGive, GameObject objCarried)
     {
         Debug.Log("AddItem");
         Debug.Assert(it != null);
@@ -47,6 +47,8 @@ public class ItemsBox : MonoBehaviour
                 var obj = Instantiate(it);
                 obj.GetComponent<Item>().objToGive = objToGive;
                 obj.GetComponent<Item>().objCarried = objCarried;
+                obj.GetComponent<Item>().picIdle = picIdle;
+                obj.GetComponent<Item>().picPicked = picPicked;
                 obj.transform.parent = this.transform;
                 var col = i / mStorageY;
                 var raw = i % mStorageY;

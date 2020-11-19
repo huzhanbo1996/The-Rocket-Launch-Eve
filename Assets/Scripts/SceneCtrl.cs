@@ -16,7 +16,13 @@ public class SceneCtrl : MonoBehaviour
         mCurrSceneI = mCurrSceneJ = -1;
         mCurrSceneI = int.Parse(InitialScene.name.Split('_')[1]);
         mCurrSceneJ = int.Parse(InitialScene.name.Split('_')[2]);
-        
+        foreach (GameObject scene in Scenes)
+        {
+            if (scene.name != "Scene_" + mCurrSceneJ.ToString() + "_" + mCurrSceneJ.ToString())
+            {
+                scene.SetActive(false);
+            }
+        }
     }
 
     // Update is called once per frame
@@ -30,6 +36,7 @@ public class SceneCtrl : MonoBehaviour
         {
             if(scene.name == "Scene_" + i.ToString() + "_" + j.ToString())
             {
+                Debug.Log(scene.name);
                 return scene;
             }
         }
@@ -59,6 +66,8 @@ public class SceneCtrl : MonoBehaviour
         }
         fadeOutUtil.DoFadeOut();
         GameObject newScene = FindSceneByIndex(mCurrSceneI, mCurrSceneJ);
+        newScene.SetActive(true);
+        currScene.SetActive(false);
         Vector3 move = newScene.transform.position - currScene.transform.position;
         this.transform.position += move;
         foreach(GameObject ui in UIobjs)
