@@ -46,6 +46,7 @@ namespace Common
                 //}
                 Collider2D col = Physics2D.OverlapPoint(Camera.main.ScreenToWorldPoint(Input.mousePosition), activeLayers);
                 if (col == null) return false;
+                //Debug.Log(col.gameObject.name);
                 if (col.gameObject == obj)
                 {
                     return true;
@@ -57,6 +58,11 @@ namespace Common
         static public void SetActiveLayer(string layerName)
         {
             activeLayers = LayerMask.GetMask(layerName);
+        }
+
+        static public string TrimClone(string origName)
+        {
+            return origName.Replace("(Clone)", "").Trim();
         }
     }
 }

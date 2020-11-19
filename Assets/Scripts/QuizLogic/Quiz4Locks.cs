@@ -1,0 +1,118 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using Common;
+
+public class Quiz4Locks : MonoBehaviour
+{
+    public string mInitalCode1;
+    public string mInitalCode2;
+    public string mAnsCode1;
+    public string mAnsCode2;
+    public GameObject mBonus1;
+    public GameObject mBonus2;
+    public GameObject mSceneObj;
+
+    private List<Sprite> mNumSp = new List<Sprite>();
+    private string RESOURCES_PATH = "Quiz4Locks";
+    private List<NumCode> mLock1 = new List<NumCode>();
+    private List<NumCode> mLock2 = new List<NumCode>();
+    private class NumCode
+    {
+        public GameObject obj;
+        public int num;
+        public NumCode(GameObject obj, int num)
+        {
+            this.obj = obj;
+            this.num = num;
+        }
+    }
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        for (int i = 0; i < 10; i++)
+        {
+            string spriteName = i.ToString().ToUpper();
+            Debug.Log(RESOURCES_PATH + "/" + spriteName);
+            var sp = Instantiate(Resources.Load<Sprite>(RESOURCES_PATH + "/" + spriteName)) as Sprite;
+            mNumSp.Add(sp);
+        }
+        var lock1 = this.transform.Find("Lock1");
+        for (int i = 0; i < lock1.transform.childCount; i++)
+        {
+            mLock1.Add(new NumCode(lock1.transform.GetChild(i).gameObject, i));
+        }
+        var lock2 = this.transform.Find("Lock2");
+        for (int i = 0; i < lock2.transform.childCount; i++)
+        {
+            mLock2.Add(new NumCode(lock2.transform.GetChild(i).gameObject, i));
+        }
+
+        for (int i = 0; i < mInitalCode1.Length; i++)
+        {
+            int num = int.Parse(mInitalCode1[i].ToString());
+            mLock1[i].obj.GetComponent<SpriteRenderer>().sprite = mNumSp[num];
+            mLock1[i].num = num;
+        }
+
+        for (int i = 0; i < mInitalCode2.Length; i++)
+        {
+            int num = int.Parse(mInitalCode2[i].ToString());
+            mLock2[i].obj.GetComponent<SpriteRenderer>().sprite = mNumSp[num];
+            mLock2[i].num = num;
+        }
+        mBonus1.SetActive(false);
+        mBonus2.SetActive(false);
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        foreach(var code in mLock1)
+        {
+            if(Common.Utils.ClickedOn(code.obj))
+            {
+                int num = (code.num + 1) % 10;
+                code.num = num;
+                code.obj.GetComponent<SpriteRenderer>().sprite = mNumSp[num];
+            }
+        }
+        if(mBonus1.activeSelf) // lock lock#2 until lock#1 resolved
+        {
+            foreach (var code in mLock2)
+            {
+                if (Common.Utils.ClickedOn(code.obj))
+                {
+                    int num = (code.num + 1) % 10;
+                    code.num = num;
+                    code.obj.GetComponent<SpriteRenderer>().sprite = mNumSp[num];
+                }
+            }
+        }
+        
+        if(CatAns(mLock1) == mAnsCode1)
+        {
+            mBonus1.SetActive(true);
+        }
+
+        if(CatAns(mLock2) == mAnsCode2)
+        {
+            mBonus2.SetActive(true);
+            mSceneObj.GetComponent<SceneObj>().QuizResolved();
+        }
+
+    }
+
+
+
+    private string CatAns(List<NumCode> s)
+    {
+        string ret = "";
+        foreach(var code in s)
+        {
+            ret += code.num.ToString();
+        }
+        return ret;
+    }
+}
