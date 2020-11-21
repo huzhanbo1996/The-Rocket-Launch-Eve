@@ -98,6 +98,21 @@ public class Quiz9Puzzle : MonoBehaviour
         Render();
     }
 
+    public void OnEnable()
+    {
+        for (int i = 0; i < mInitalOrder.Length; i++)
+        {
+            int target = int.Parse(mInitalOrder[i].ToString());
+            foreach (var piece in mPieces)
+            {
+                if (piece.number == target)
+                {
+                    piece.position = i;
+                }
+            }
+        }
+    }
+
     private piece FindVoid()
     {
         foreach(var piece in mPieces)
