@@ -70,7 +70,9 @@ public class SceneObj : MonoBehaviour
             Common.Utils.SetActiveLayer("Quiz");
             showQuiz = true;
         }
-        else if (hasQuiz && showQuiz && Common.Utils.ClickedAnywhereOut(relatedQuizArea))   // exit quiz
+        else if (hasQuiz && showQuiz
+            && Common.Utils.ClickedAnywhereOut(itemsBox.gameObject)
+            && Common.Utils.ClickedAnywhereOut(relatedQuizArea))   // exit quiz
         {
             //itemsBox.gameObject.SetActive(true);
             relatedQuiz.SetActive(false);

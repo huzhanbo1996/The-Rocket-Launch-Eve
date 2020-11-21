@@ -6,6 +6,7 @@ namespace Common
 {
     public class Utils
     {
+        static private LayerMask ALWAYS_ACTIVE_LAYER = LayerMask.GetMask("Always");
         static private LayerMask activeLayers = LayerMask.GetMask("Default");  
         static public bool ClickedAnywhereOut(GameObject obj)
         {
@@ -57,7 +58,7 @@ namespace Common
 
         static public void SetActiveLayer(string layerName)
         {
-            activeLayers = LayerMask.GetMask(layerName);
+            activeLayers = LayerMask.GetMask(layerName) | ALWAYS_ACTIVE_LAYER;
         }
 
         static public string TrimClone(string origName)
