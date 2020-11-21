@@ -206,7 +206,6 @@ public class QuizHuaRong : MonoBehaviour
             }
             i = Mathf.Min(mTable.Length, i);
             ret.y = i - p.position.x - p.lenght;
-            Debug.Log(ret.x + ":" + ret.y);
         }
         else
         {
@@ -225,7 +224,6 @@ public class QuizHuaRong : MonoBehaviour
             }
             j = Mathf.Min(mTable.Length, j);
             ret.y = j - p.position.y - p.lenght;
-            Debug.Log(ret.x + ":" + ret.y);
         }
         return ret;
     }
