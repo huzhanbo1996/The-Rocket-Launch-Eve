@@ -16,10 +16,10 @@ public class SceneObj : MonoBehaviour
     public GameObject relatedQuiz;
     public GameObject objToGive;
     public GameObject objCarried;
+    public GameObject relatedQuizArea;
 
     private ItemsBox itemsBox;
     private SpriteRenderer mSRender;
-    private GameObject relatedQuizArea;
     public bool showQuiz;
     // Start is called before the first frame update
     void Start()

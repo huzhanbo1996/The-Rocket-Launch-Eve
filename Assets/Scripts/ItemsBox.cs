@@ -36,6 +36,29 @@ public class ItemsBox : MonoBehaviour
         
     }
 
+    public bool MoveItemIn(GameObject obj)
+    {
+        Debug.Assert(obj != null);
+        for (int i = 0; i < mInventory.Length; i++)
+        {
+            if (mInventory[i] == null)
+            {
+                var col = i / mStorageY;
+                var raw = i % mStorageY;
+                obj.transform.parent = this.transform;
+                obj.transform.localPosition = new Vector3(
+                    col * sizeOfItemX / mPixelsPerUnit,
+                    -raw * sizeOfItemY / mPixelsPerUnit,
+                    obj.transform.position.z);
+                mInventory[i] = obj;
+                obj.SetActive(true);
+                return true;
+            }
+        }
+        Debug.LogError("itemsBox is full, consider refactorization!!!");
+        return false;
+    }
+
     public bool AddItem(GameObject it, Sprite picIdle, Sprite picPicked, GameObject objToGive, GameObject objCarried)
     {
         Debug.Log("AddItem");

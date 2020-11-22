@@ -12,6 +12,8 @@ public class Quiz4Locks : MonoBehaviour
     public GameObject mBonus1;
     public GameObject mBonus2;
     public GameObject mSceneObj;
+    public GameObject piece1;
+    public GameObject piece2;
 
     private List<Sprite> mNumSp = new List<Sprite>();
     private string RESOURCES_PATH = "Quiz4Locks";
@@ -62,7 +64,8 @@ public class Quiz4Locks : MonoBehaviour
             mLock2[i].obj.GetComponent<SpriteRenderer>().sprite = mNumSp[num];
             mLock2[i].num = num;
         }
-        mBonus1.SetActive(false);
+        SetActiveLock2(false);
+        mBonus1.SetActive(true);
         mBonus2.SetActive(false);
     }
 
@@ -78,8 +81,9 @@ public class Quiz4Locks : MonoBehaviour
                 code.obj.GetComponent<SpriteRenderer>().sprite = mNumSp[num];
             }
         }
-        if(mBonus1.activeSelf) // lock lock#2 until lock#1 resolved
+        if(!mBonus1.activeSelf) // lock lock#2 until lock#1 resolved
         {
+            SetActiveLock2(true);
             foreach (var code in mLock2)
             {
                 if (Common.Utils.ClickedOn(code.obj))
@@ -93,17 +97,33 @@ public class Quiz4Locks : MonoBehaviour
         
         if(CatAns(mLock1) == mAnsCode1)
         {
-            mBonus1.SetActive(true);
+            // make sure it'll be only moved one time
+            if (mBonus1.activeSelf == true) FindObjectOfType<ItemsBox>().MoveItemIn(piece1);
+            mBonus1.SetActive(false);
+            mBonus2.SetActive(true);
         }
 
         if(CatAns(mLock2) == mAnsCode2)
         {
-            mBonus2.SetActive(true);
+            //mBonus2.SetActive(true);
+            FindObjectOfType<ItemsBox>().MoveItemIn(piece2);
             mSceneObj.GetComponent<SceneObj>().QuizResolved();
         }
 
     }
 
+    private void SetActiveLock2(bool b)
+    {
+        for (int i = 0; i < mInitalCode2.Length; i++)
+        {
+            mLock2[i].obj.SetActive(b);
+        }
+
+        for (int i = 0; i < mInitalCode2.Length; i++)
+        {
+            mLock1[i].obj.SetActive(!b);
+        }
+    }
 
 
     private string CatAns(List<NumCode> s)

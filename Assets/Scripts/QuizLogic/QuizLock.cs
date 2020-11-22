@@ -10,6 +10,7 @@ public class QuizLock : MonoBehaviour
     public string mAnsCode;
     public List<Code> mCodes = new List<Code>();
     public GameObject SceneObj;
+    public GameObject mQuizBonus;
 
     public class Code
     {
@@ -22,6 +23,7 @@ public class QuizLock : MonoBehaviour
             this.name = v;
         }
     }
+    private ItemsBox mItemsBox;
     private string mCodeSeq;
     private string mNowCode;
     private Dictionary<string, Sprite> mCodeVSSprite = new Dictionary<string, Sprite>();
@@ -29,6 +31,7 @@ public class QuizLock : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        mItemsBox = FindObjectOfType<ItemsBox>();
         var childCodes = this.transform.Find("Codes");
         for (int i = 0; i < childCodes.childCount; i++)
         {
@@ -68,6 +71,13 @@ public class QuizLock : MonoBehaviour
         RenderCode();
         if(mNowCode == mAnsCode)
         {
+            mQuizBonus.transform.parent = this.transform.parent;
+            mQuizBonus.transform.localPosition = new Vector3(
+                SceneObj.transform.localPosition.x,
+                SceneObj.transform.localPosition.y,
+                mQuizBonus.transform.position.z
+                );
+            mQuizBonus.SetActive(true);
             SceneObj.GetComponent<SceneObj>().QuizResolved();
         }
     }

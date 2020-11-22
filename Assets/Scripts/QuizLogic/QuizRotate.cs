@@ -18,9 +18,11 @@ public class QuizRotate : MonoBehaviour
     private List<KeyValuePair<GameObject,int>> mRotateGroupLeft = new List<KeyValuePair<GameObject, int>>();
     private List<KeyValuePair<GameObject,int>> mRotateGroupRight = new List<KeyValuePair<GameObject, int>>();
     private List<Vector3> mPosistions = new List<Vector3>();
+    private bool mResolved;
     // Start is called before the first frame update
     void Start()
     {
+        mResolved = false;
         foreach (var obj in mTargets)
         {
             mPosistions.Add(obj.transform.position);
@@ -43,6 +45,7 @@ public class QuizRotate : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (mResolved) return;
         if (Common.Utils.ClickedOn(mButtomLeft))
         {
             var backup = new List<KeyValuePair<GameObject, int>>(mRotateGroupLeft);
@@ -82,7 +85,19 @@ public class QuizRotate : MonoBehaviour
 
         if(isCorret)
         {
-            mSceneObj.GetComponent<SceneObj>().QuizResolved();
+            FindObjectOfType<ComputerSwitch>().QuizResolved();
+            mResolved = true;
+            foreach(var p in mRotateGroupRight)
+            {
+                Destroy(p.Key);
+            }
+            foreach(var p in mRotateGroupLeft)
+            {
+                Destroy(p.Key);
+            }
+            Destroy(mButtomLeft);
+            Destroy(mButtomMiddle);
+            Destroy(mButtomRight);
         }
     }
 }

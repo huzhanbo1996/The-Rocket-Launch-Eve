@@ -11,16 +11,19 @@ public class QuizBottleLogic : MonoBehaviour
     public GameObject mButtunLine;
     public GameObject mBandPrefab;
     public GameObject mSceneObj;
+    public GameObject mItemBeer;
     public bool mResolved;
 
+    private QuizReception mQuizReception;
     private string mResourcePath = "QuizBottle";
     private Vector3 mButtun;
-    private Vector3 mCurrPosition;
+    public Vector3 mCurrPosition;
     private List<GameObject> mBottleBandsKeeper = new List<GameObject>();
     private Dictionary<GameObject, Sprite> mButtomsVSSprite = new Dictionary<GameObject, Sprite>();
     // Start is called before the first frame update
     void Start()
     {
+        mQuizReception = this.transform.Find("Area").GetComponent<QuizReception>();
         mResolved = false;
         mCurrPosition = mButtun = mButtunLine.transform.localPosition;
         foreach(var buttom in mButtoms)
@@ -40,6 +43,20 @@ public class QuizBottleLogic : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        foreach(var buttun in mButtomsVSSprite)
+        {
+            buttun.Key.SetActive(false);
+        }
+        foreach (var buttun in mButtomsVSSprite)
+        {
+            foreach(var fake in mQuizReception.GetItems())
+            {
+                if (buttun.Key.name == Common.Utils.TrimClone(fake.name))
+                {
+                    buttun.Key.SetActive(true);
+                }
+            }
+        }
         if (Common.Utils.ClickedOn(mButtomFlush))
         {
             foreach (var band in mBottleBandsKeeper)
@@ -55,8 +72,8 @@ public class QuizBottleLogic : MonoBehaviour
             {
                 var newBand = Instantiate(mBandPrefab);
                 newBand.GetComponent<SpriteRenderer>().sprite = buttom.Value;
-                newBand.transform.localPosition = mCurrPosition;
                 newBand.transform.parent = this.transform;
+                newBand.transform.localPosition = mCurrPosition;
                 newBand.transform.name = buttom.Key.name;
                 mCurrPosition += (Vector3)(Vector2.up * buttom.Value.textureRect.height 
                                                         / buttom.Value.pixelsPerUnit);
@@ -83,6 +100,7 @@ public class QuizBottleLogic : MonoBehaviour
             if(i == mBottleBandsKeeper.Count)
             {
                 mResolved = true;
+                FindObjectOfType<ItemsBox>().MoveItemIn(mItemBeer);
                 mSceneObj.GetComponent<SceneObj>().QuizResolved();
             }
         }

@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using Common;
 
-public class Quiz4NPC : MonoBehaviour
+public class Quiz4NPC : MonoBehaviour, ICapturable
 {
     public List<GameObject> mNPCinOrder;
     public string mAnsOrder;
     public float mShowMsgTime = 3.0f;
     public GameObject mRelatedSceneObj;
+    public GameObject mItemBonus;
+    public Sprite mPictureHold;
 
     private string mNowOrder;
     private QuizReception mQuizReception;
@@ -59,7 +61,11 @@ public class Quiz4NPC : MonoBehaviour
             {
                 if (Common.Utils.TrimClone(obj.name) == tgt.obj.name)
                 {
-                    tgt.isActive = true;
+                    foreach (var _tgt in mNPCs)
+                    {
+                        _tgt.isActive = true;
+                    }
+                    //tgt.isActive = true;
                 }
             }
         }
@@ -99,10 +105,26 @@ public class Quiz4NPC : MonoBehaviour
 
         if(mNowOrder == mAnsOrder)
         {
+            FindObjectOfType<ItemsBox>().MoveItemIn(mItemBonus);
             mRelatedSceneObj.GetComponent<SceneObj>().QuizResolved();
         }
 
     }
+
+    public Sprite GetPicture()
+    {
+        if (mNPCs[0].isActive)
+            return mPictureHold;
+        else
+            return null;
+    }
+
+    public GameObject GetScene()
+    {
+        Debug.Assert(this.transform.parent.gameObject.name.Contains("Scene"));
+        return this.transform.parent.gameObject;
+    }
+
     private void OnEnable()
     {
         foreach (var tgt in mNPCs)

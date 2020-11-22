@@ -170,6 +170,7 @@ public class QuizPointsSupression : MonoBehaviour
             else if(mStage == 4)
             {
                 Clear();
+                FindObjectOfType<ComputerSwitch>().QuizResolved();
             }
         }
     }

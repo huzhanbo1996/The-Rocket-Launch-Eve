@@ -4,6 +4,8 @@ KWON ISSUS
 click out of the quiz region may trigget other obj's logic. (QUIZ BOTTLE IS GOOD)
 in QuizPuzzle, if piece was moved out of bound, it can't be moved back.
 
+Wrong estimation of segments' intersection in QuizPointsSupression    		!!!!!!!! P1
+
 
 TODO
 need rewrite itemBox selection logic

@@ -9,6 +9,7 @@ public class Item : MonoBehaviour
     public GameObject objToGive;
     public GameObject objCarried;
 
+    private QuizReception mQuizReception;
     private SpriteRenderer mSRender;
     // Start is called before the first frame update
     void Start()
@@ -27,6 +28,14 @@ public class Item : MonoBehaviour
             mSRender.sprite = picPicked;
             if (itemsBox != null) itemsBox.objPickedUp.Add(this.gameObject);
         }
+
+        if(objToGive!= null && Common.Utils.ClickedOn(objToGive) && mSRender.sprite == picPicked)
+        {
+            var newItem = Instantiate(objCarried);
+            objToGive.GetComponent<QuizReception>().AddItem(newItem);
+            itemsBox.RemoveItem(this.gameObject);
+        }
+
         if(Common.Utils.ClickedAnywhereOut(this.gameObject) && 
             (objToGive==null || !Common.Utils.ClickedOn(objToGive))
             )

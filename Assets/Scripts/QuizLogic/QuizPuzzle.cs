@@ -10,10 +10,13 @@ public class QuizPuzzle : MonoBehaviour
     private Dictionary<string, Vector3> mAnsPositions = new Dictionary<string, Vector3>();
     private int mAnsCnt;
     private int mStillNeedCnt;
+    private Ending mEnding;
     // Start is called before the first frame update
     void Start()
     {
-        mQuizReception = this.GetComponent<QuizReception>();
+        mEnding = FindObjectOfType<Ending>();
+        Debug.Assert(mEnding != null);
+        mQuizReception = this.transform.Find("Area").GetComponent<QuizReception>();
         Debug.Assert(mQuizReception != null);
         var childPieces = this.transform.Find("Pieces");
         mStillNeedCnt = mAnsCnt = childPieces.childCount;
@@ -47,6 +50,7 @@ public class QuizPuzzle : MonoBehaviour
         }
         if(mStillNeedCnt == 0)
         {
+            mEnding.FinishOneLine();
             this.mSceneObj.GetComponent<SceneObj>().QuizResolved();
         }
     }

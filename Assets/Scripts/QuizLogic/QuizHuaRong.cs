@@ -8,7 +8,10 @@ public class QuizHuaRong : MonoBehaviour
     public GameObject mPiecePrefab;
     public bool mStage2 = false;
     public GameObject mResetBtn;
+    public GameObject mSceneObj;
+    public GameObject mObjTOGive;
 
+    private ItemsBox mItemsBox;
     private Vector2Int mAnsPosition;
     private class Piece
     {
@@ -49,13 +52,23 @@ public class QuizHuaRong : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        mItemsBox = FindObjectOfType<ItemsBox>();
         string[] rsName = { "1x3", "1x2", "3x1", "2x1", "target"};
         foreach(var name in rsName)
         {
             var sp = Instantiate(Resources.Load<Sprite>(RESOURCES_PATH + "/" + name)) as Sprite;
             mSps.Add(name, sp);
         }
-        Set1();
+        if (mStage2)
+        {
+            Clear();
+            Set2();
+        }
+        else
+        {
+            Clear();
+            Set1();
+        }
     }
 
     // Update is called once per frame
@@ -105,9 +118,8 @@ public class QuizHuaRong : MonoBehaviour
             // check ans
             if(piece.isSp && piece.position == mAnsPosition)
             {
-                mStage2 = true;
-                Clear();
-                Set2();
+                mItemsBox.MoveItemIn(mObjTOGive);
+                mSceneObj.GetComponent<SceneObj>().QuizResolved();
             }
         }
         if(Common.Utils.ClickedOn(mResetBtn))
