@@ -91,7 +91,7 @@ public class QuizPointsSupression : MonoBehaviour
     {
         mStage = 1;
         int i;
-        for (i = 0; i <= 5; i++)
+        for (i = 0; i <= 6; i++)
         {
             string spriteName = i.ToString().ToUpper();
             Debug.Log(RESOURCES_PATH + "/" + spriteName);
@@ -161,6 +161,7 @@ public class QuizPointsSupression : MonoBehaviour
         }
         if(cntRemains == 0)
         {
+            Debug.Log(mStage);
             mStage++;
             if (mStage <= 3)
             {

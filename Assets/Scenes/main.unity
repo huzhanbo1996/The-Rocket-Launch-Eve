@@ -121,6 +121,25 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &4123744 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 444442314, guid: 3be95697b39c9774aa266ad5fe332846,
+    type: 3}
+  m_PrefabInstance: {fileID: 1869357457}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &4123748
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4123744}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dfcdc553c2ebff24ea073c7168019bca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mIsFake: 1
 --- !u!1 &7317868
 GameObject:
   m_ObjectHideFlags: 0
@@ -6120,7 +6139,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 519420028}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a059d41e1337f4045bc794cc66fa1f7e, type: 3}
   m_Name: 
@@ -15549,7 +15568,7 @@ GameObject:
   - component: {fileID: 1549743110}
   - component: {fileID: 1549743109}
   - component: {fileID: 1549743108}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: L2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -16450,12 +16469,12 @@ PrefabInstance:
     - target: {fileID: 6112173297942248560, guid: bdc94d9d7196a2e459898b008173c105,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -3.89
+      value: -1.67
       objectReference: {fileID: 0}
     - target: {fileID: 6112173297942248560, guid: bdc94d9d7196a2e459898b008173c105,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.42
+      value: -0.39
       objectReference: {fileID: 0}
     - target: {fileID: 6112173297942248560, guid: bdc94d9d7196a2e459898b008173c105,
         type: 3}
@@ -16691,7 +16710,7 @@ PrefabInstance:
     - target: {fileID: 6112173297942248564, guid: bdc94d9d7196a2e459898b008173c105,
         type: 3}
       propertyPath: m_Name
-      value: SceneObj (1)
+      value: For4NPC
       objectReference: {fileID: 0}
     - target: {fileID: 6112173297942248564, guid: bdc94d9d7196a2e459898b008173c105,
         type: 3}
@@ -16707,7 +16726,7 @@ PrefabInstance:
         type: 3}
       propertyPath: objToGive
       value: 
-      objectReference: {fileID: 2005247336}
+      objectReference: {fileID: 4123744}
     - target: {fileID: 6112173297942248566, guid: bdc94d9d7196a2e459898b008173c105,
         type: 3}
       propertyPath: picIdle
@@ -18451,19 +18470,6 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 1869357457}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1869357460
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1869357459}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dfcdc553c2ebff24ea073c7168019bca, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mIsFake: 0
 --- !u!114 &1869357461
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19496,7 +19502,7 @@ PrefabInstance:
     - target: {fileID: 6112173297942248566, guid: bdc94d9d7196a2e459898b008173c105,
         type: 3}
       propertyPath: receiveItems
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6112173297942248566, guid: bdc94d9d7196a2e459898b008173c105,
         type: 3}
@@ -19745,7 +19751,7 @@ GameObject:
   - component: {fileID: 2024296839}
   - component: {fileID: 2024296838}
   - component: {fileID: 2024296837}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: L3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -20507,7 +20513,7 @@ GameObject:
   - component: {fileID: 2125124607}
   - component: {fileID: 2125124606}
   - component: {fileID: 2125124605}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: L4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -23119,7 +23125,7 @@ GameObject:
   - component: {fileID: 6788006162462713302}
   - component: {fileID: 6788006162462713303}
   - component: {fileID: 5740920582914854277}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: L1
   m_TagString: Untagged
   m_Icon: {fileID: 0}

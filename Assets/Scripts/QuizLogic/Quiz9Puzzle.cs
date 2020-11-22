@@ -100,6 +100,7 @@ public class Quiz9Puzzle : MonoBehaviour
 
     public void OnEnable()
     {
+        if (isResolved) return;
         for (int i = 0; i < mInitalOrder.Length; i++)
         {
             int target = int.Parse(mInitalOrder[i].ToString());

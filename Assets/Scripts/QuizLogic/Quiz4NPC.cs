@@ -40,7 +40,7 @@ public class Quiz4NPC : MonoBehaviour, ICapturable
     // Start is called before the first frame update
     void Start()
     {
-        mQuizReception = this.GetComponent<QuizReception>();
+        mQuizReception = this.transform.Find("Area").GetComponent<QuizReception>();
         for (int i = 0; i < mNPCinOrder.Count; i++)
         {
             var obj = mNPCinOrder[i];
