@@ -48,13 +48,13 @@ public class SceneObj : MonoBehaviour
         if (itemsBox.objPickedUp.Count > 0 && this.gameObject.name=="SceneObjPuzzle")
         {
             
-            Debug.Log(receiveItems.ToString() + (!showQuiz).ToString() + (itemsBox.objPickedUp.Count > 0).ToString() 
-                + itemsBox.objPickedUp[0].GetComponent<Item>().objToGive.name);
+            //Debug.Log(receiveItems.ToString() + (!showQuiz).ToString() + (itemsBox.objPickedUp.Count > 0).ToString() 
+            //    + itemsBox.objPickedUp[0].GetComponent<Item>().objToGive.name);
             
             
         }
-        if (receiveItems && !showQuiz 
-            && itemsBox.objPickedUp.Count > 0 
+        if (receiveItems && !showQuiz
+            && itemsBox.objPickedUp.Count > 0
             && itemsBox.objPickedUp[0].GetComponent<Item>().objToGive == this.gameObject
             && Common.Utils.ClickedOn(this.gameObject))  // collect item
         {
@@ -63,16 +63,24 @@ public class SceneObj : MonoBehaviour
             relatedQuiz.GetComponent<QuizReception>().AddItem(cpy);
             itemsBox.RemoveItem(item.gameObject);
         }
-        else if(hasQuiz && !showQuiz && Common.Utils.ClickedOn(this.gameObject))  // focus on quiz
+        else if ( hasQuiz &&
+                  (!showQuiz || relatedQuiz.GetComponent<QuizCamera>() != null) &&
+                  Common.Utils.ClickedOn(this.gameObject)) // focus on quiz
         {
             //itemsBox.gameObject.SetActive(false);
+            // don't change quizCamera's layerMask
+            if (relatedQuiz.GetComponent<QuizCamera>() == null)
+                Common.Utils.SetActiveLayer("Quiz");
             relatedQuiz.SetActive(true);
-            Common.Utils.SetActiveLayer("Quiz");
             showQuiz = true;
         }
-        else if (hasQuiz && showQuiz
-            && Common.Utils.ClickedAnywhereOut(itemsBox.gameObject)
-            && Common.Utils.ClickedAnywhereOut(relatedQuizArea))   // exit quiz
+        else if (hasQuiz && showQuiz && 
+                 Common.Utils.ClickedAnywhereOut(itemsBox.gameObject) && 
+                 Common.Utils.ClickedAnywhereOut(relatedQuizArea) && 
+                 relatedQuiz.gameObject.GetComponent<QuizCamera>() == null &&
+                 FindObjectOfType<QuizCamera>() == null // if QuizCamera is active it will return nonnull else null 
+                 )   
+                 // exit quiz, dont influence QuizCamera UI which will exit by itself
         {
             //itemsBox.gameObject.SetActive(true);
             relatedQuiz.SetActive(false);

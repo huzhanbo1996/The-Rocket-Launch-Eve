@@ -56,6 +56,7 @@ public class ItemsBox : MonoBehaviour
                     col * sizeOfItemX / mPixelsPerUnit,
                     - raw * sizeOfItemY / mPixelsPerUnit,
                     obj.transform.position.z);
+                obj.SetActive(true);
                 mInventory[i] = obj;
                 return true;
             }

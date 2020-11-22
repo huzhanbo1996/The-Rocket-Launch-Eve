@@ -56,9 +56,21 @@ namespace Common
             return false;
         }
 
+        static public void SetActiveLayer(LayerMask layerMask)
+        {
+            Debug.Log((int)layerMask);
+            activeLayers = layerMask | ALWAYS_ACTIVE_LAYER;
+        }
+
         static public void SetActiveLayer(string layerName)
         {
+            Debug.Log(LayerMask.GetMask(layerName));
             activeLayers = LayerMask.GetMask(layerName) | ALWAYS_ACTIVE_LAYER;
+        }
+
+        static public LayerMask GetActiveLayer()
+        {
+            return activeLayers;
         }
 
         static public string TrimClone(string origName)

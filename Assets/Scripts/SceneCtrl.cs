@@ -43,6 +43,11 @@ public class SceneCtrl : MonoBehaviour
         Debug.LogError("FindSceneByIndex ERROR!!!");
         return null;
     }
+
+    public GameObject GetCurrScene()
+    {
+        return FindSceneByIndex(mCurrSceneI, mCurrSceneJ);
+    }
     public void ChangeDirection(ChangeSceneButtom.Direction dir)
     {
         GameObject currScene = FindSceneByIndex(mCurrSceneI, mCurrSceneJ);

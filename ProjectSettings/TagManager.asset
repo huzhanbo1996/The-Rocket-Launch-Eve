@@ -16,7 +16,7 @@ TagManager:
   - 
   - Quiz
   - Always
-  - 
+  - Camera
   - 
   - 
   - 
@@ -50,4 +50,7 @@ TagManager:
     locked: 0
   - name: Top
     uniqueID: 603283375
+    locked: 0
+  - name: Camera
+    uniqueID: 2829188561
     locked: 0
