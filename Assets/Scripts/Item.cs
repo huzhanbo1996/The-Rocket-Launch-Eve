@@ -7,7 +7,9 @@ public class Item : MonoBehaviour
     public Sprite picIdle;
     public Sprite picPicked;
     public GameObject objToGive;
+    public GameObject objToGive2;
     public GameObject objCarried;
+    public bool mKeephAfterUse;
 
     private QuizReception mQuizReception;
     private SpriteRenderer mSRender;
@@ -33,11 +35,20 @@ public class Item : MonoBehaviour
         {
             var newItem = Instantiate(objCarried);
             objToGive.GetComponent<QuizReception>().AddItem(newItem);
-            itemsBox.RemoveItem(this.gameObject);
+            if (!mKeephAfterUse) itemsBox.RemoveItem(this.gameObject);
         }
 
-        if(Common.Utils.ClickedAnywhereOut(this.gameObject) && 
-            (objToGive==null || !Common.Utils.ClickedOn(objToGive))
+        if (objToGive2 != null && Common.Utils.ClickedOn(objToGive2) && mSRender.sprite == picPicked)
+        {
+            var newItem = Instantiate(objCarried);
+            objToGive2.GetComponent<QuizReception>().AddItem(newItem);
+            if (!mKeephAfterUse) itemsBox.RemoveItem(this.gameObject);
+        }
+
+
+        if (Common.Utils.ClickedAnywhereOut(this.gameObject) && 
+            (objToGive==null || !Common.Utils.ClickedOn(objToGive)) &&
+            (objToGive2==null || !Common.Utils.ClickedOn(objToGive2))
             )
         {
             mSRender.sprite = picIdle;

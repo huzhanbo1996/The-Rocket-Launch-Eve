@@ -4,19 +4,30 @@ using UnityEngine;
 
 public class QuizComputer : MonoBehaviour
 {
+    public GameObject ItemIdCard;
+    private ItemsBox itemsBox;
     // Start is called before the first frame update
     void Start()
     {
-        
+        itemsBox = FindObjectOfType<ItemsBox>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(this.GetComponent<QuizReception>().GetItems().Count> 0)
+        var inventory = this.GetComponent<QuizReception>().GetItems();
+        if (inventory.Count > 0)
         {
-            FindObjectOfType<ComputerSwitch>().QuizResolved();
-            this.GetComponent<QuizReception>().GetItems().Clear();
+            if(itemsBox.ContainsCloneOf("ItemIdCard"))
+            {
+                FindObjectOfType<ComputerSwitch>().QuizResolved();
+                inventory.Clear();
+            }
+            else
+            {
+                itemsBox.MoveItemIn(inventory[0]);
+                inventory.Clear();
+            }
         }
     }
 }

@@ -107,4 +107,28 @@ public class ItemsBox : MonoBehaviour
         Debug.LogError("No items found in imtesBox : " + it.name);
         return false;
     }
+
+    public bool ContainsCloneOf(GameObject obj)
+    {
+        foreach(var it in mInventory)
+        {
+            if (it != null && Common.Utils.TrimClone(it.name) == obj.name)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public bool ContainsCloneOf(string name)
+    {
+        foreach (var it in mInventory)
+        {
+            if (it != null && Common.Utils.TrimClone(it.name) == name)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 }

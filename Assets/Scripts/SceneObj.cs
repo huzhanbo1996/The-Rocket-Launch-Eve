@@ -18,12 +18,14 @@ public class SceneObj : MonoBehaviour
     public GameObject objCarried;
     public GameObject relatedQuizArea;
 
+    private bool mNeedSetLayerMask;
     private ItemsBox itemsBox;
     private SpriteRenderer mSRender;
     public bool showQuiz;
     // Start is called before the first frame update
     void Start()
     {
+        mNeedSetLayerMask = false;
         Common.Utils.SetActiveLayer("Default");
         mSRender = this.GetComponent<SpriteRenderer>();
         mSRender.enabled = visiable;
@@ -84,7 +86,7 @@ public class SceneObj : MonoBehaviour
         {
             //itemsBox.gameObject.SetActive(true);
             relatedQuiz.SetActive(false);
-            Common.Utils.SetActiveLayer("Default");
+            mNeedSetLayerMask = true;            
             showQuiz = false;
         }
 
@@ -99,6 +101,11 @@ public class SceneObj : MonoBehaviour
 
     private void LateUpdate()
     {
+        if(mNeedSetLayerMask)
+        {
+            Common.Utils.SetActiveLayer("Default");
+            mNeedSetLayerMask = false;
+        }
         
     }
     public void QuizResolved()

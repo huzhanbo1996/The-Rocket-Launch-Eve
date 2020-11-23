@@ -10,14 +10,17 @@ public class QuizWire : MonoBehaviour, ICapturable
     private Dictionary<GameObject, Sprite> mBtnVSSp = new Dictionary<GameObject, Sprite>();
     private string RESOURCES_PATH = "QuizWire";
     private Sprite mCurrSp;
+    private QuizReception mQuizReception;
     // Start is called before the first frame update
     void Start()
     {
+        mQuizReception = this.transform.Find("Area").GetComponent<QuizReception>();
         mSpR = this.transform.Find("Area").GetComponent<SpriteRenderer>();
+        mCurrSp = mSpR.sprite;
         RESOURCES_PATH += "/wire_";
         foreach(var button in mBtns)
         {
-            Debug.Log(RESOURCES_PATH + button.name);
+            Debug.Log(RESOURCES_PATH + button.name.ToLower());
             var rs = Resources.Load<Sprite>(RESOURCES_PATH + button.name);
             var sp = Instantiate(rs) as Sprite;
             mBtnVSSp.Add(button, sp);
@@ -29,17 +32,31 @@ public class QuizWire : MonoBehaviour, ICapturable
     {
         foreach(var buttom in mBtns)
         {
-            if(Common.Utils.ClickedOn(buttom))
+            foreach (var it in mQuizReception.GetItems())
             {
-                mCurrSp = mBtnVSSp[buttom];
-                mSpR.sprite = mCurrSp;
+                if (it.name.IndexOf(buttom.name) >= 0)
+                {
+                    mCurrSp = mBtnVSSp[buttom];
+                    mSpR.sprite = mCurrSp;
+                }
             }
         }
+    }
+    private void OnEnable()
+    {
+        
     }
 
     public Sprite GetPicture()
     {
-        return mCurrSp;
+        if (this.gameObject.gameObject.activeSelf)
+        {
+            return mCurrSp;
+        }
+        else
+        {
+            return null;
+        }
     }
     public GameObject GetScene()
     {

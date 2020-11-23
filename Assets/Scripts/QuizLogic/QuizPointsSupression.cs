@@ -111,9 +111,10 @@ public class QuizPointsSupression : MonoBehaviour
         {
             if(Common.Utils.ClickedOn(p.obj))
             {
-                if (mPickedPoint == null && p.remainPoints > 0)
+                if (mPickedPoint == null)
                 {
-                    mPickedPoint = p;
+                    if(p.remainPoints > 0) mPickedPoint = p;
+                    else                   mPickedPoint = null;
                 }
                 else if(mPickedPoint != p)
                 {
@@ -161,7 +162,6 @@ public class QuizPointsSupression : MonoBehaviour
         }
         if(cntRemains == 0)
         {
-            Debug.Log(mStage);
             mStage++;
             if (mStage <= 3)
             {
@@ -178,6 +178,7 @@ public class QuizPointsSupression : MonoBehaviour
 
     public void OnEnable()
     {
+        mPickedPoint = null;
         Clear();
         Set(mStage);
     }
@@ -216,14 +217,14 @@ public class QuizPointsSupression : MonoBehaviour
         }
         else if(part == 3)
         {
-            mPoints.Add(NewPoint(new Vector2Int(8, 4), 6));
-            mPoints.Add(NewPoint(new Vector2Int(8, 8), 3));
-            mPoints.Add(NewPoint(new Vector2Int(7, 6), 3));
-            mPoints.Add(NewPoint(new Vector2Int(5, 3), 3));
-            mPoints.Add(NewPoint(new Vector2Int(4, 7), 5));
-            mPoints.Add(NewPoint(new Vector2Int(3, 1), 4));
-            mPoints.Add(NewPoint(new Vector2Int(3, 5), 5));
-            mPoints.Add(NewPoint(new Vector2Int(1, 6), 3));
+            mPoints.Add(NewPoint(new Vector2Int(7, 3), 6));
+            mPoints.Add(NewPoint(new Vector2Int(7, 7), 3));
+            mPoints.Add(NewPoint(new Vector2Int(6, 5), 3));
+            mPoints.Add(NewPoint(new Vector2Int(4, 2), 3));
+            mPoints.Add(NewPoint(new Vector2Int(3, 6), 5));
+            mPoints.Add(NewPoint(new Vector2Int(2, 0), 4));
+            mPoints.Add(NewPoint(new Vector2Int(2, 4), 5));
+            mPoints.Add(NewPoint(new Vector2Int(0, 5), 3));
         }
         
     }
