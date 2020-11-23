@@ -11,13 +11,17 @@ public class Item : MonoBehaviour
     public GameObject objCarried;
     public bool mKeephAfterUse;
 
+    public Material outLineMaterial;
     private QuizReception mQuizReception;
     private SpriteRenderer mSRender;
     // Start is called before the first frame update
     void Start()
     {
         mSRender = this.GetComponent<SpriteRenderer>();
+        outLineMaterial = mSRender.material;
         mSRender.sprite = picIdle;
+        picPicked = Instantiate(picIdle);
+        outLineMaterial.SetFloat("_Thickness", 0);
     }
 
     // Update is called once per frame
@@ -28,6 +32,7 @@ public class Item : MonoBehaviour
         if (Common.Utils.ClickedOn(this.gameObject))
         {
             mSRender.sprite = picPicked;
+            outLineMaterial.SetFloat("_Thickness", 10);
             if (itemsBox != null) itemsBox.objPickedUp.Add(this.gameObject);
         }
 
@@ -52,6 +57,7 @@ public class Item : MonoBehaviour
             )
         {
             mSRender.sprite = picIdle;
+            outLineMaterial.SetFloat("_Thickness", 0);
             if (itemsBox != null) itemsBox.objPickedUp.Remove(this.gameObject);
         }
     }

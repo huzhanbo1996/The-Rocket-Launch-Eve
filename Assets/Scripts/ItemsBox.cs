@@ -47,8 +47,8 @@ public class ItemsBox : MonoBehaviour
                 var raw = i % mStorageY;
                 obj.transform.parent = this.transform;
                 obj.transform.localPosition = new Vector3(
-                    col * sizeOfItemX / mPixelsPerUnit,
-                    -raw * sizeOfItemY / mPixelsPerUnit,
+                    col * sizeOfItemX / mPixelsPerUnit + sizeOfItemX / 2.0f / mPixelsPerUnit,
+                    -raw * sizeOfItemY / mPixelsPerUnit - sizeOfItemY / 2.0f / mPixelsPerUnit,
                     obj.transform.position.z);
                 mInventory[i] = obj;
                 obj.SetActive(true);
@@ -76,8 +76,8 @@ public class ItemsBox : MonoBehaviour
                 var col = i / mStorageY;
                 var raw = i % mStorageY;
                 obj.transform.localPosition = new Vector3(
-                    col * sizeOfItemX / mPixelsPerUnit,
-                    - raw * sizeOfItemY / mPixelsPerUnit,
+                    col * sizeOfItemX / mPixelsPerUnit + sizeOfItemX / 2.0f / mPixelsPerUnit,
+                    - raw * sizeOfItemY / mPixelsPerUnit - sizeOfItemY / 2.0f / mPixelsPerUnit,
                     obj.transform.position.z);
                 obj.SetActive(true);
                 mInventory[i] = obj;

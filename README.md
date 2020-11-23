@@ -3,8 +3,7 @@ unity version 2019.4.0f1
 KWON ISSUS
 click out of the quiz region may trigget other obj's logic. (QUIZ BOTTLE IS GOOD)
 in QuizPuzzle, if piece was moved out of bound, it can't be moved back.
-
-Wrong estimation of segments' intersection in QuizPointsSupression    		!!!!!!!! P1
+in Quiz4NPC, cash can't be gave to NPC
 
 
 TODO
