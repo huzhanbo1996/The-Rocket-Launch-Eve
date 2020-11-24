@@ -9,6 +9,12 @@ public class ItemsBox : MonoBehaviour
     public float sizeOfItemY;
     public List<GameObject> objPickedUp = new List<GameObject>();
 
+    public float mHideMove;
+    public GameObject mBtnLeft;
+    public GameObject mBtnRight;
+    public GameObject mQuizCamera;
+    public float mHideUpDown;
+
     private int mStorageX;
     private int mStorageY;
     private Rect mSpriteTextureRect;
@@ -17,6 +23,7 @@ public class ItemsBox : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        mBtnLeft.SetActive(false);
         mSpriteTextureRect = this.GetComponent<SpriteRenderer>().sprite.textureRect;
         mPixelsPerUnit = this.GetComponent<SpriteRenderer>().sprite.pixelsPerUnit;
         mStorageX = (int)(mSpriteTextureRect.width / sizeOfItemX);
@@ -33,7 +40,21 @@ public class ItemsBox : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (!mQuizCamera.activeSelf)
+        {
+            if (Common.Utils.ClickedOn(mBtnRight))
+            {
+                this.transform.position += (Vector3)(Vector2.right * mHideMove);
+                mBtnRight.SetActive(false);
+                mBtnLeft.SetActive(true);
+            }
+            if (Common.Utils.ClickedOn(mBtnLeft))
+            {
+                this.transform.position -= (Vector3)(Vector2.right * mHideMove);
+                mBtnLeft.SetActive(false);
+                mBtnRight.SetActive(true);
+            }
+        }
     }
 
     public bool MoveItemIn(GameObject obj)

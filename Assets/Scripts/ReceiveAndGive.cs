@@ -23,14 +23,9 @@ public class ReceiveAndGive : MonoBehaviour
     {
         if (quizReception.GetItems().Count > 0)
         {
-            cntReceived++;
+            //cntReceived++;
             itemsBox.MoveItemIn(quizReception.GetItems()[0]);
             quizReception.RemoveItem(quizReception.GetItems()[0]);
-        }
-        if (cntReceived == 2)
-        {
-            cntReceived++;
-            mEnding.FinishOneLine();
         }
     }
 }
