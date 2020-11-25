@@ -10,13 +10,20 @@ public class ComputerSwitch : MonoBehaviour
     public GameObject mQuizComputer;
     public GameObject mQuizRotate;
     public GameObject mQuizPoints;
+    public QuizElec mQuizElec;
+    public List<Sprite> mSpScene;
+
+
+    private bool mIsSetup;
     private SceneObj mSceneObj;
     private ItemsBox mItemsBox;
+    private SpriteRenderer mSpR;
     private List<Sprite> mSps = new List<Sprite>();
     private string RESOURCES_PATH = "QuizComputer";
     // Start is called before the first frame update
     void Start()
     {
+        mSpR = this.GetComponent<SpriteRenderer>();
         mSceneObj = this.GetComponent<SceneObj>();
         mStage = 0;
         isResolve = false;
@@ -26,6 +33,16 @@ public class ComputerSwitch : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if ( (mQuizElec == null || mQuizElec.mPhase != 2) && 
+             !mIsSetup)
+        {
+            this.gameObject.GetComponent<Collider2D>().enabled = false;
+        }
+        else
+        {
+            mIsSetup = true;
+            this.gameObject.GetComponent<Collider2D>().enabled = true;
+        }
         mItemsBox = FindObjectOfType<ItemsBox>();
         for (int i = 0; i < 3; i++)
         {
@@ -35,14 +52,25 @@ public class ComputerSwitch : MonoBehaviour
         switch (mStage)
         {
             case 0:
+                mSpR.sprite = mSpScene[0];
                 mSceneObj.relatedQuiz = mQuizComputer;
                 mSceneObj.relatedQuizArea = mQuizComputer.transform.Find("Area").gameObject;
                 break;
             case 1:
+                mSpR.sprite = mSpScene[1];
+                this.transform.localScale = new Vector3(1, 1, 1);
+                this.transform.position = new Vector3(0, 0, 0);
+                this.GetComponent<BoxCollider2D>().offset = new Vector2(-2.96f, -2.65f);
+                this.GetComponent<BoxCollider2D>().size = new Vector2(1.42f, 0.92f);
                 mSceneObj.relatedQuiz = mQuizRotate;
                 mSceneObj.relatedQuizArea = mQuizRotate.transform.Find("Area").gameObject;
                 break;
             case 2:
+                mSpR.sprite = mSpScene[2];
+                this.transform.localScale = new Vector3(1, 1, 1);
+                this.transform.position = new Vector3(0, 0, 0);
+                this.GetComponent<BoxCollider2D>().offset = new Vector2(-2.96f, -2.65f);
+                this.GetComponent<BoxCollider2D>().size = new Vector2(1.42f, 0.92f);
                 mSceneObj.relatedQuiz = mQuizPoints;
                 mSceneObj.relatedQuizArea = mQuizPoints.transform.Find("Area").gameObject;
                 break;

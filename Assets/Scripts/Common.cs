@@ -6,10 +6,34 @@ namespace Common
 {
     public class Utils
     {
+        static private bool enable = true;
         static private LayerMask ALWAYS_ACTIVE_LAYER = LayerMask.GetMask("Always");
-        static private LayerMask activeLayers = LayerMask.GetMask("Default");  
+        static private LayerMask activeLayers = LayerMask.GetMask("Default");
+        static public bool ClickedOnChildenOf(GameObject obj)
+        {
+            if (!enable) return false;
+            Debug.Assert(obj.GetComponent<Collider2D>() != null || obj.transform.childCount > 0);
+            if (Input.GetMouseButtonDown(0))
+            {
+                Collider2D[] col = Physics2D.OverlapPointAll(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+                if (col.Length == 0)
+                {
+                    return false;
+                }
+                foreach(var target in col)
+                {
+                    if (obj.transform.Find(target.gameObject.name) ||
+                        target.gameObject == obj)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
         static public bool ClickedAnywhereOut(GameObject obj)
         {
+            if (!enable) return false;
             Debug.Assert(obj.GetComponent<Collider2D>() != null);
             if (Input.GetMouseButtonDown(0))
             {
@@ -37,6 +61,7 @@ namespace Common
 
         static public bool ClickedOn(GameObject obj)
         {
+            if (!enable) return false;
             Debug.Assert(obj.GetComponent<Collider2D>() != null);
             if (Input.GetMouseButtonDown(0))
             {
@@ -66,6 +91,11 @@ namespace Common
         {
             Debug.Log(LayerMask.GetMask(layerName));
             activeLayers = LayerMask.GetMask(layerName) | ALWAYS_ACTIVE_LAYER;
+        }
+
+        static public void SetActive(bool b)
+        {
+            enable = b;
         }
 
         static public LayerMask GetActiveLayer()

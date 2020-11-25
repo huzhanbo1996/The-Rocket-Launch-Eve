@@ -118,7 +118,8 @@ public class QuizHuaRong : MonoBehaviour
             // check ans
             if(piece.isSp && piece.position == mAnsPosition)
             {
-                mItemsBox.MoveItemIn(mObjTOGive);
+                mObjTOGive.SetActive(true);
+                //mItemsBox.MoveItemIn(mObjTOGive);
                 mSceneObj.GetComponent<SceneObj>().QuizResolved();
             }
         }
@@ -190,7 +191,7 @@ public class QuizHuaRong : MonoBehaviour
     private void AddPiece(GameObject obj, Sprite sp, int[][] points, Vector2Int position, bool verticle, bool isSp = false)
     {
         var objInstance = Instantiate(obj);
-        objInstance.transform.parent = this.transform.Find("Bound").transform;
+        objInstance.transform.parent = this.transform.Find("Area").transform;
         objInstance.transform.localPosition = new Vector3(position.x, position.y,
                                                           objInstance.transform.localPosition.z);
         objInstance.GetComponent<Draguable>().Initialize(sp);

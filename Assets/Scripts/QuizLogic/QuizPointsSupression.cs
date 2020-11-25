@@ -34,8 +34,8 @@ public class QuizPointsSupression : MonoBehaviour
         {
             this.p1 = p1;
             this.p2 = p2;
-            this.p1 += (p2 - p1) * 0.3f;
-            this.p2 += (p1 - p2) * 0.3f;
+            this.p1 += (p2 - p1) * 0.1f;
+            this.p2 += (p1 - p2) * 0.1f;
             this.lineRender = lineRender;
         }
 

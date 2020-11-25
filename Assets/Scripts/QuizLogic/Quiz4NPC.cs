@@ -7,7 +7,7 @@ public class Quiz4NPC : MonoBehaviour, ICapturable
 {
     public List<GameObject> mNPCinOrder;
     public string mAnsOrder;
-    public float mShowMsgTime = 3.0f;
+    public float mShowMsgTime = 2.0f;
     public GameObject mRelatedSceneObj;
     public GameObject mItemBonus;
     public Sprite mPictureHold;
@@ -15,6 +15,7 @@ public class Quiz4NPC : MonoBehaviour, ICapturable
     private string mNowOrder;
     private QuizReception mQuizReception;
     private List<NPC> mNPCs = new List<NPC>();
+    private LayerMask tmpLayer;
     private class NPC
     {
         public GameObject obj;
@@ -40,6 +41,7 @@ public class Quiz4NPC : MonoBehaviour, ICapturable
     // Start is called before the first frame update
     void Start()
     {
+        tmpLayer = -1;
         mQuizReception = this.transform.Find("Area").GetComponent<QuizReception>();
         for (int i = 0; i < mNPCinOrder.Count; i++)
         {
@@ -84,7 +86,7 @@ public class Quiz4NPC : MonoBehaviour, ICapturable
                 }
                 else // state 2
                 {
-                    ShowMsg(tgt.msg, mShowMsgTime);
+                    //ShowMsg(tgt.msg, mShowMsgTime);
                     if(tgt.musicSign.activeSelf)
                     {
                         foreach(var clr in mNPCs)
@@ -103,13 +105,32 @@ public class Quiz4NPC : MonoBehaviour, ICapturable
             }
         }
 
-        if(mNowOrder == mAnsOrder)
+        if (mNowOrder == mAnsOrder && tmpLayer == -1)
         {
-            FindObjectOfType<ItemsBox>().MoveItemIn(mItemBonus);
-            mRelatedSceneObj.GetComponent<SceneObj>().QuizResolved();
+            tmpLayer = Common.Utils.GetActiveLayer();
+            Common.Utils.SetActive(false);
+            Ending();
         }
 
     }
+
+    private void Ending()
+    {
+        for (int i = 0; i < mAnsOrder.Length; i++)
+        {
+            char c = mAnsOrder[i];
+            foreach (var tgt in mNPCs)
+            {
+                if (tgt.num == c)
+                {
+                    StartCoroutine(DelayShowMsg(tgt.msg, i * mShowMsgTime, (i + 1) * mShowMsgTime));
+                }
+
+            }
+        }
+        StartCoroutine(DelayDestory(mAnsOrder.Length * mShowMsgTime));
+    }
+
 
     public Sprite GetPicture()
     {
@@ -141,5 +162,20 @@ public class Quiz4NPC : MonoBehaviour, ICapturable
     {
         yield return new WaitForSeconds(delaySeconds);
         obj.SetActive(false);
+    }
+
+    private IEnumerator DelayDestory(float delay1)
+    {
+        yield return new WaitForSeconds(delay1);
+        Common.Utils.SetActive(true);
+        FindObjectOfType<ItemsBox>().MoveItemIn(mItemBonus);
+        mRelatedSceneObj.GetComponent<SceneObj>().QuizResolved();
+    }
+    private static IEnumerator DelayShowMsg(GameObject msg, float delay1, float delay2)
+    {
+        yield return new WaitForSeconds(delay1);
+        msg.SetActive(true);
+        yield return new WaitForSeconds(delay2);
+        msg.SetActive(false);
     }
 }

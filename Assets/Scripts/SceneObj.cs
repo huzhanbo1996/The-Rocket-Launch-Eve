@@ -26,7 +26,6 @@ public class SceneObj : MonoBehaviour
     void Start()
     {
         mNeedSetLayerMask = false;
-        Common.Utils.SetActiveLayer("Default");
         mSRender = this.GetComponent<SpriteRenderer>();
         mSRender.enabled = visiable;
         itemsBox = FindObjectOfType<ItemsBox>();
@@ -65,7 +64,7 @@ public class SceneObj : MonoBehaviour
             relatedQuiz.GetComponent<QuizReception>().AddItem(cpy);
             itemsBox.RemoveItem(item.gameObject);
         }
-        else if ( hasQuiz &&
+        else if (hasQuiz &&
                   (!showQuiz || relatedQuiz.GetComponent<QuizCamera>() != null) &&
                   Common.Utils.ClickedOn(this.gameObject)) // focus on quiz
         {
@@ -76,7 +75,8 @@ public class SceneObj : MonoBehaviour
             relatedQuiz.SetActive(true);
             showQuiz = true;
         }
-        else if (hasQuiz && showQuiz && 
+        else if (hasQuiz && showQuiz &&
+                 (!Common.Utils.ClickedOnChildenOf(itemsBox.gameObject)) &&
                  Common.Utils.ClickedAnywhereOut(itemsBox.gameObject) && 
                  Common.Utils.ClickedAnywhereOut(relatedQuizArea) && 
                  relatedQuiz.gameObject.GetComponent<QuizCamera>() == null &&

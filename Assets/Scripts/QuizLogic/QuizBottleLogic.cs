@@ -47,14 +47,22 @@ public class QuizBottleLogic : MonoBehaviour
         {
             buttun.Key.SetActive(false);
         }
-        foreach (var buttun in mButtomsVSSprite)
+        foreach (var buttom in mButtomsVSSprite)
         {
             foreach(var fake in mQuizReception.GetItems())
             {
-                if (buttun.Key.name == Common.Utils.TrimClone(fake.name))
-                {
-                    buttun.Key.SetActive(true);
-                }
+                var newBand = Instantiate(mBandPrefab);
+                newBand.GetComponent<SpriteRenderer>().sprite = buttom.Value;
+                newBand.transform.parent = this.transform;
+                newBand.transform.localPosition = mCurrPosition;
+                newBand.transform.name = buttom.Key.name;
+                mCurrPosition += (Vector3)(Vector2.up * buttom.Value.textureRect.height
+                                                        / buttom.Value.pixelsPerUnit);
+                mBottleBandsKeeper.Add(newBand);
+                //if (buttun.Key.name == Common.Utils.TrimClone(fake.name))
+                //{
+                //    buttun.Key.SetActive(true);
+                //}
             }
         }
         if (Common.Utils.ClickedOn(mButtomFlush))
@@ -70,14 +78,14 @@ public class QuizBottleLogic : MonoBehaviour
         {
             if (Common.Utils.ClickedOn(buttom.Key))
             {
-                var newBand = Instantiate(mBandPrefab);
-                newBand.GetComponent<SpriteRenderer>().sprite = buttom.Value;
-                newBand.transform.parent = this.transform;
-                newBand.transform.localPosition = mCurrPosition;
-                newBand.transform.name = buttom.Key.name;
-                mCurrPosition += (Vector3)(Vector2.up * buttom.Value.textureRect.height 
-                                                        / buttom.Value.pixelsPerUnit);
-                mBottleBandsKeeper.Add(newBand);
+                //var newBand = Instantiate(mBandPrefab);
+                //newBand.GetComponent<SpriteRenderer>().sprite = buttom.Value;
+                //newBand.transform.parent = this.transform;
+                //newBand.transform.localPosition = mCurrPosition;
+                //newBand.transform.name = buttom.Key.name;
+                //mCurrPosition += (Vector3)(Vector2.up * buttom.Value.textureRect.height 
+                //                                        / buttom.Value.pixelsPerUnit);
+                //mBottleBandsKeeper.Add(newBand);
             }
         }
         if(mBottleBandsKeeper.Count > mAnsOrder.Count)

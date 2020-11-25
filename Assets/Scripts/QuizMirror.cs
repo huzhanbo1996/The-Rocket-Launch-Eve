@@ -5,10 +5,12 @@ using UnityEngine;
 public class QuizMirror : MonoBehaviour, ICapturable
 {
     public GameObject item;
+
+    private bool isGaved;
     // Start is called before the first frame update
     void Start()
     {
-        
+        isGaved = false;
     }
 
     // Update is called once per frame
@@ -19,9 +21,13 @@ public class QuizMirror : MonoBehaviour, ICapturable
 
     public Sprite GetPicture()
     {
-        if(this.gameObject.transform.parent.gameObject.activeSelf)
+        if (this.gameObject.transform.parent.gameObject.activeSelf)
         {
-            FindObjectOfType<ItemsBox>().MoveItemIn(item);
+            if(!isGaved)
+            {
+                isGaved = true;
+                FindObjectOfType<ItemsBox>().MoveItemIn(item);
+            }
             return GetComponent<SpriteRenderer>().sprite;
         }
         else

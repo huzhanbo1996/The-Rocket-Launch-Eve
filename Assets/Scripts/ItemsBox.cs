@@ -12,17 +12,27 @@ public class ItemsBox : MonoBehaviour
     public float mHideMove;
     public GameObject mBtnLeft;
     public GameObject mBtnRight;
+    public GameObject mBtnUp;
+    public GameObject mBtnDown;
     public GameObject mQuizCamera;
+    public List<GameObject> Axis = new List<GameObject>();
     public float mHideUpDown;
 
+    private int mCurrVisible;
     private int mStorageX;
     private int mStorageY;
     private Rect mSpriteTextureRect;
     private float mPixelsPerUnit;
-    private GameObject[] mInventory;
+    private List<GameObject[]> mInventoryList = new List<GameObject[]>();
     // Start is called before the first frame update
     void Start()
     {
+        Axis[2].transform.position = Axis[1].transform.position = Axis[0].transform.position;
+        Axis[1].transform.position += (Vector3)(Vector2.up * mHideUpDown);
+        Axis[2].transform.position += (Vector3)(Vector2.up * mHideUpDown * 2);
+        mCurrVisible = 0;
+        mBtnUp.SetActive(false);
+        mBtnDown.SetActive(false);
         mBtnLeft.SetActive(false);
         mSpriteTextureRect = this.GetComponent<SpriteRenderer>().sprite.textureRect;
         mPixelsPerUnit = this.GetComponent<SpriteRenderer>().sprite.pixelsPerUnit;
@@ -30,15 +40,23 @@ public class ItemsBox : MonoBehaviour
         mStorageY = (int)(mSpriteTextureRect.height / sizeOfItemY);
         Debug.Log("mStorageX : " + mStorageX);
         Debug.Log("mStorageY : " + mStorageY);
-        mInventory = new GameObject[mStorageX * mStorageY];
-        for(int i=0; i < mInventory.Length; i++)
+        for (int cnt = 0; cnt < 3; cnt++)
         {
-            mInventory[i] = null;
+            var mInventory = new GameObject[mStorageX * mStorageY];
+            for (int i = 0; i < mInventory.Length; i++)
+            {
+                mInventory[i] = null;
+            }
+            mInventoryList.Add(mInventory);
         }
     }
 
     // Update is called once per frame
     void Update()
+    {
+
+    }
+    private void LateUpdate()
     {
         if (!mQuizCamera.activeSelf)
         {
@@ -54,28 +72,92 @@ public class ItemsBox : MonoBehaviour
                 mBtnLeft.SetActive(false);
                 mBtnRight.SetActive(true);
             }
+
+            if (Common.Utils.ClickedOn(mBtnUp))
+            {
+                mCurrVisible--;
+                for (int cnt = 0; cnt < 3; cnt++)
+                {
+                    Axis[cnt].transform.position += (Vector3)(Vector2.up * mHideUpDown);
+                }
+            }
+
+            if (Common.Utils.ClickedOn(mBtnDown))
+            {
+                mCurrVisible++;
+                for (int cnt = 0; cnt < 3; cnt++)
+                {
+                    Axis[cnt].transform.position += (Vector3)(Vector2.down * mHideUpDown);
+                }
+            }
         }
+
+        mBtnUp.SetActive(true);
+        mBtnDown.SetActive(true);
+        //Debug.Log(mCurrVisible);
+        //Debug.Log("after" + FindIsEmpty(true).ToString());
+        //Debug.Log("before" + FindIsEmpty(false).ToString());
+
+
+        if (FindIsEmpty(true))
+        {
+            mBtnDown.SetActive(false);
+        }
+        if (FindIsEmpty(false))
+        {
+            mBtnUp.SetActive(false);
+        }
+    }
+
+    private bool FindIsEmpty(bool towardAfter)
+    {
+        if (towardAfter)
+        {
+            for (int idx = mCurrVisible + 1; idx < mInventoryList.Count; idx++)
+            {
+                foreach(var it in mInventoryList[idx])
+                {
+                    if (it != null) return false;
+                }
+            }
+        }
+        else
+        {
+            for (int idx = mCurrVisible - 1; idx >= 0; idx--)
+            {
+                foreach (var it in mInventoryList[idx])
+                {
+                    if (it != null) return false;
+                }
+            }
+        }
+        return true;   
     }
 
     public bool MoveItemIn(GameObject obj)
     {
         Debug.Assert(obj != null);
-        for (int i = 0; i < mInventory.Length; i++)
+        for (int idx = 0; idx < mInventoryList.Count; idx++)
         {
-            if (mInventory[i] == null)
+            var mInventory = mInventoryList[idx];
+            for (int i = 0; i < mInventory.Length; i++)
             {
-                var col = i / mStorageY;
-                var raw = i % mStorageY;
-                obj.transform.parent = this.transform;
-                obj.transform.localPosition = new Vector3(
-                    col * sizeOfItemX / mPixelsPerUnit + sizeOfItemX / 2.0f / mPixelsPerUnit,
-                    -raw * sizeOfItemY / mPixelsPerUnit - sizeOfItemY / 2.0f / mPixelsPerUnit,
-                    obj.transform.position.z);
-                mInventory[i] = obj;
-                obj.SetActive(true);
-                return true;
+                if (mInventory[i] == null)
+                {
+                    var col = i / mStorageY;
+                    var raw = i % mStorageY;
+                    obj.transform.parent = Axis[idx].transform;
+                    obj.transform.localPosition = new Vector3(
+                        col * sizeOfItemX / mPixelsPerUnit + sizeOfItemX / 2.0f / mPixelsPerUnit,
+                        -raw * sizeOfItemY / mPixelsPerUnit - sizeOfItemY / 2.0f / mPixelsPerUnit,
+                        obj.transform.position.z);
+                    mInventory[i] = obj;
+                    obj.SetActive(true);
+                    return true;
+                }
             }
         }
+        
         Debug.LogError("itemsBox is full, consider refactorization!!!");
         return false;
     }
@@ -84,25 +166,29 @@ public class ItemsBox : MonoBehaviour
     {
         Debug.Log("AddItem");
         Debug.Assert(it != null);
-        for (int i = 0; i < mInventory.Length; i++)
+        for (int idx = 0; idx < mInventoryList.Count; idx++)
         {
-            if (mInventory[i] == null)
+            var mInventory = mInventoryList[idx];
+            for (int i = 0; i < mInventory.Length; i++)
             {
-                var obj = Instantiate(it);
-                obj.GetComponent<Item>().objToGive = objToGive;
-                obj.GetComponent<Item>().objCarried = objCarried;
-                obj.GetComponent<Item>().picIdle = picIdle;
-                obj.GetComponent<Item>().picPicked = picPicked;
-                obj.transform.parent = this.transform;
-                var col = i / mStorageY;
-                var raw = i % mStorageY;
-                obj.transform.localPosition = new Vector3(
-                    col * sizeOfItemX / mPixelsPerUnit + sizeOfItemX / 2.0f / mPixelsPerUnit,
-                    - raw * sizeOfItemY / mPixelsPerUnit - sizeOfItemY / 2.0f / mPixelsPerUnit,
-                    obj.transform.position.z);
-                obj.SetActive(true);
-                mInventory[i] = obj;
-                return true;
+                if (mInventory[i] == null)
+                {
+                    var obj = Instantiate(it);
+                    obj.GetComponent<Item>().objToGive = objToGive;
+                    obj.GetComponent<Item>().objCarried = objCarried;
+                    obj.GetComponent<Item>().picIdle = picIdle;
+                    obj.GetComponent<Item>().picPicked = picPicked;
+                    obj.transform.parent = Axis[idx].transform;
+                    var col = i / mStorageY;
+                    var raw = i % mStorageY;
+                    obj.transform.localPosition = new Vector3(
+                        col * sizeOfItemX / mPixelsPerUnit + sizeOfItemX / 2.0f / mPixelsPerUnit,
+                        -raw * sizeOfItemY / mPixelsPerUnit - sizeOfItemY / 2.0f / mPixelsPerUnit,
+                        obj.transform.position.z);
+                    obj.SetActive(true);
+                    mInventory[i] = obj;
+                    return true;
+                }
             }
         }
         Debug.LogError("itemsBox is full, consider refactorization!!!");
@@ -116,13 +202,17 @@ public class ItemsBox : MonoBehaviour
         {
             objPickedUp.Remove(it);
         }
-        for (int i = 0; i < mInventory.Length; i++)
+        for (int idx = 0; idx < mInventoryList.Count; idx++)
         {
-            if (mInventory[i] == it)
+            var mInventory = mInventoryList[idx];
+            for (int i = 0; i < mInventory.Length; i++)
             {
-                mInventory[i] = null;
-                Destroy(it);
-                return true;
+                if (mInventory[i] == it)
+                {
+                    mInventory[i] = null;
+                    Destroy(it);
+                    return true;
+                }
             }
         }
         Debug.LogError("No items found in imtesBox : " + it.name);
@@ -131,11 +221,15 @@ public class ItemsBox : MonoBehaviour
 
     public bool ContainsCloneOf(GameObject obj)
     {
-        foreach(var it in mInventory)
+        for (int idx = 0; idx < mInventoryList.Count; idx++)
         {
-            if (it != null && Common.Utils.TrimClone(it.name) == obj.name)
+            var mInventory = mInventoryList[idx];
+            foreach (var it in mInventory)
             {
-                return true;
+                if (it != null && Common.Utils.TrimClone(it.name) == obj.name)
+                {
+                    return true;
+                }
             }
         }
         return false;
@@ -143,11 +237,15 @@ public class ItemsBox : MonoBehaviour
 
     public bool ContainsCloneOf(string name)
     {
-        foreach (var it in mInventory)
+        for (int idx = 0; idx < mInventoryList.Count; idx++)
         {
-            if (it != null && Common.Utils.TrimClone(it.name) == name)
+            var mInventory = mInventoryList[idx];
+            foreach (var it in mInventory)
             {
-                return true;
+                if (it != null && Common.Utils.TrimClone(it.name) == name)
+                {
+                    return true;
+                }
             }
         }
         return false;

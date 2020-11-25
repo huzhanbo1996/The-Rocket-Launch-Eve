@@ -27,7 +27,7 @@ public class Item : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        var itemsBox = this.transform.parent.GetComponent<ItemsBox>();
+        var itemsBox = FindObjectOfType<ItemsBox>();
         //Debug.Assert(itemsBox != null);
         if (Common.Utils.ClickedOn(this.gameObject))
         {
