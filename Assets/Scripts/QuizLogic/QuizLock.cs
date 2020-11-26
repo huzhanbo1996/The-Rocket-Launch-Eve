@@ -11,6 +11,8 @@ public class QuizLock : MonoBehaviour
     public List<Code> mCodes = new List<Code>();
     public GameObject SceneObj;
     public GameObject mQuizBonus;
+    public Sprite mSpScneObj2;
+    public bool isResolved;
 
     public class Code
     {
@@ -31,6 +33,7 @@ public class QuizLock : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        isResolved = false;
         mItemsBox = FindObjectOfType<ItemsBox>();
         var childCodes = this.transform.Find("Codes");
         for (int i = 0; i < childCodes.childCount; i++)
@@ -58,6 +61,7 @@ public class QuizLock : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (isResolved) return;
         for (int i = 0; i < mCodes.Count; i++)
         {
             var code = mCodes[i];
@@ -71,14 +75,17 @@ public class QuizLock : MonoBehaviour
         RenderCode();
         if(mNowCode == mAnsCode)
         {
-            mQuizBonus.transform.parent = this.transform.parent;
-            mQuizBonus.transform.localPosition = new Vector3(
-                SceneObj.transform.localPosition.x,
-                SceneObj.transform.localPosition.y,
-                mQuizBonus.transform.position.z
-                );
+            //mQuizBonus.transform.parent = this.transform.parent;
+            //mQuizBonus.transform.localPosition = new Vector3(
+            //    SceneObj.transform.localPosition.x,
+            //    SceneObj.transform.localPosition.y,
+            //    mQuizBonus.transform.position.z
+            //    );
             mQuizBonus.SetActive(true);
-            SceneObj.GetComponent<SceneObj>().QuizResolved();
+            isResolved = true;
+            SceneObj.GetComponent<SpriteRenderer>().sprite = mSpScneObj2;
+            SceneObj.GetComponent<SpriteRenderer>().GetComponent<Collider2D>().enabled = false;
+            //SceneObj.GetComponent<SceneObj>().QuizResolved();
         }
     }
 

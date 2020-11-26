@@ -11,6 +11,7 @@ public class QuizIngredient : MonoBehaviour
     private ItemsBox mItemsBox;
     private Dictionary<GameObject, GameObject> mObjVSShow = new Dictionary<GameObject, GameObject>();
     private GameObject mCurrObj;
+    private GameObject mCurrObj2;
     // Start is called before the first frame update
     void Start()
     {
@@ -18,6 +19,7 @@ public class QuizIngredient : MonoBehaviour
         mItemsBox = FindObjectOfType<ItemsBox>();
         Debug.Assert(mItemsBox != null);
         mCurrObj = null;
+        mCurrObj2 = null;
         for (int i = 0; i < mObjs.Count; i++)
         {
             Debug.Assert(mObjs[i] != null && mShows[i] != null);
@@ -30,7 +32,7 @@ public class QuizIngredient : MonoBehaviour
     void Update()
     {
         if (!enable) return;
-        if(mCurrObj == null)
+        if (mCurrObj == null)
         {
             foreach(var obj in mObjs)
             {
@@ -51,12 +53,23 @@ public class QuizIngredient : MonoBehaviour
         }
         else
         {
+            foreach (var obj in mObjs)
+            {
+                if (Common.Utils.ClickedOn(obj) && obj!=mCurrObj)
+                {
+                    mObjVSShow[obj].SetActive(true);
+                    mCurrObj2 = obj;
+                    return;
+                }
+            }
             if (Common.Utils.ClickedAnywhereOut(mObjVSShow[mCurrObj].transform.Find("Area").gameObject) &&
                 !Common.Utils.ClickedOnChildenOf(mItemsBox.gameObject)
                 )
             {
                 mObjVSShow[mCurrObj].SetActive(false);
+                if (mCurrObj2 != null) mObjVSShow[mCurrObj2].SetActive(false);
                 mCurrObj = null;
+                mCurrObj2 = null;
             }
         }
     }

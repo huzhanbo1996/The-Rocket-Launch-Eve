@@ -51,20 +51,25 @@ public class QuizBottleLogic : MonoBehaviour
         {
             foreach(var fake in mQuizReception.GetItems())
             {
-                var newBand = Instantiate(mBandPrefab);
-                newBand.GetComponent<SpriteRenderer>().sprite = buttom.Value;
-                newBand.transform.parent = this.transform;
-                newBand.transform.localPosition = mCurrPosition;
-                newBand.transform.name = buttom.Key.name;
-                mCurrPosition += (Vector3)(Vector2.up * buttom.Value.textureRect.height
-                                                        / buttom.Value.pixelsPerUnit);
-                mBottleBandsKeeper.Add(newBand);
+                if (buttom.Key.name == Common.Utils.TrimClone(fake.name))
+                {
+                    var newBand = Instantiate(mBandPrefab);
+                    newBand.GetComponent<SpriteRenderer>().sprite = buttom.Value;
+                    newBand.transform.parent = this.transform;
+                    newBand.transform.localPosition = mCurrPosition;
+                    newBand.transform.name = buttom.Key.name;
+                    mCurrPosition += (Vector3)(Vector2.up * buttom.Value.textureRect.height
+                                                            / buttom.Value.pixelsPerUnit);
+                    mBottleBandsKeeper.Add(newBand);
+                    Destroy(fake);
+                }
                 //if (buttun.Key.name == Common.Utils.TrimClone(fake.name))
                 //{
                 //    buttun.Key.SetActive(true);
                 //}
             }
         }
+        mQuizReception.GetItems().Clear();
         if (Common.Utils.ClickedOn(mButtomFlush))
         {
             foreach (var band in mBottleBandsKeeper)
@@ -102,7 +107,6 @@ public class QuizBottleLogic : MonoBehaviour
             int i = 0;
             for (i = 0; i < mBottleBandsKeeper.Count; i++)
             {
-                Debug.Log(mBottleBandsKeeper[i].name + ":" + mAnsOrder[i].name);
                 if (mBottleBandsKeeper[i].name != mAnsOrder[i].name) break;
             }
             if(i == mBottleBandsKeeper.Count)

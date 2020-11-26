@@ -2,14 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//[ExecuteInEditMode]
 public class QuizPointsSupression : MonoBehaviour
 {
     public float mZeroX;
     public float mZeroY;
     public float mParamDistance;
+    public List<float> mXs;
+    public List<float> mYs;
+    public List<float> mDs;
     public GameObject mBtnPrefab;
     public GameObject mLinePrefab;
-    public int mStage;
+    public List<Sprite> mSpArea;
+    public int mStage = 0;
 
     private class Point
     {
@@ -97,8 +102,10 @@ public class QuizPointsSupression : MonoBehaviour
             Debug.Log(RESOURCES_PATH + "/" + spriteName);
             var sp = Instantiate(Resources.Load<Sprite>(RESOURCES_PATH + "/" + spriteName)) as Sprite;
             mSps.Add(sp);
-            mSpriteDistance = sp.textureRect.width / sp.pixelsPerUnit * mParamDistance;
+            //mSpriteDistance = sp.textureRect.width / sp.pixelsPerUnit * mParamDistance;
+            mSpriteDistance = mParamDistance;
         }
+        Debug.Log("mSps" + mSps.Count.ToString());
         Clear();
         Set(1);
     }
@@ -106,6 +113,14 @@ public class QuizPointsSupression : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        mZeroX = mXs[mStage - 1];
+        mZeroY = mYs[mStage - 1];
+        mSpriteDistance = mParamDistance = mDs[mStage - 1];
+        var mAreaSpR = this.transform.Find("Area").GetComponent<SpriteRenderer>();
+        if (mStage - 1 >= 0 && mStage - 1 < mSpArea.Count)
+        {
+            mAreaSpR.sprite = mSpArea[mStage - 1];
+        }
         Render();
         foreach(var p in mPoints)
         {
@@ -178,6 +193,7 @@ public class QuizPointsSupression : MonoBehaviour
 
     public void OnEnable()
     {
+        if (mStage == 0) return;
         mPickedPoint = null;
         Clear();
         Set(mStage);
@@ -232,11 +248,11 @@ public class QuizPointsSupression : MonoBehaviour
     {
         foreach(var p in mPoints)
         {
-            Destroy(p.obj);
+            DestroyImmediate(p.obj);
         }
         foreach(var l in mLines)
         {
-            Destroy(l.lineRender);
+            DestroyImmediate(l.lineRender);
         }
         mPoints.Clear();
         mLines.Clear();
