@@ -14,10 +14,10 @@ public class Ending : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(mStillNeed == 0)
-        {
-            Application.Quit();
-        }
+        //if(mStillNeed == 0)
+        //{
+        //    Application.Quit();
+        //}
     }
 
     public void FinishOneLine()

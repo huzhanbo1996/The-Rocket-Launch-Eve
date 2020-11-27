@@ -6,10 +6,12 @@ using Common;
 public class Quiz4NPC : MonoBehaviour, ICapturable
 {
     public List<GameObject> mNPCinOrder;
+    public List<GameObject> mSecMsg;
     public string mAnsOrder;
     public float mShowMsgTime = 2.0f;
     public GameObject mRelatedSceneObj;
     public GameObject mItemBonus;
+    public GameObject mBigMsg;
     public Sprite mPictureHold;
 
     private string mNowOrder;
@@ -41,6 +43,7 @@ public class Quiz4NPC : MonoBehaviour, ICapturable
     // Start is called before the first frame update
     void Start()
     {
+        mBigMsg.SetActive(false);
         tmpLayer = -1;
         mQuizReception = this.transform.Find("Area").GetComponent<QuizReception>();
         for (int i = 0; i < mNPCinOrder.Count; i++)
@@ -116,6 +119,11 @@ public class Quiz4NPC : MonoBehaviour, ICapturable
 
     private void Ending()
     {
+        mBigMsg.SetActive(true);
+        for (int i = 0; i < mNPCs.Count; i++)
+        {
+            mNPCs[i].msg = mSecMsg[i];
+        }
         for (int i = 0; i < mAnsOrder.Length; i++)
         {
             char c = mAnsOrder[i];
@@ -134,10 +142,13 @@ public class Quiz4NPC : MonoBehaviour, ICapturable
 
     public Sprite GetPicture()
     {
+        Sprite ret = null;
         if (mNPCs[0].isActive)
-            return mPictureHold;
-        else
-            return null;
+        {
+            ret = mPictureHold;
+            mPictureHold = null;
+        }
+        return ret;
     }
 
     public GameObject GetScene()

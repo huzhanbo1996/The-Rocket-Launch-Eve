@@ -61,14 +61,13 @@ public class QuizWire : MonoBehaviour, ICapturable
 
     public Sprite GetPicture()
     {
+        Sprite ret = null;
         if (this.gameObject.gameObject.activeSelf)
         {
-            return mSpVSPic[mCurrSp];
+            ret =  mSpVSPic[mCurrSp];
+            mSpVSPic[mCurrSp] = null;
         }
-        else
-        {
-            return null;
-        }
+        return ret;
     }
     public GameObject GetScene()
     {

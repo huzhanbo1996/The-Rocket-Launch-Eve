@@ -7,6 +7,7 @@ public class QuizPuzzle : MonoBehaviour
     public float mShortDistance;
     public GameObject mSceneObj;
     public bool isSolved;
+    public GameObject mBonus;
     private QuizReception mQuizReception;
     private Dictionary<string, Vector3> mAnsPositions = new Dictionary<string, Vector3>();
     private int mAnsCnt;
@@ -68,6 +69,11 @@ public class QuizPuzzle : MonoBehaviour
             }
             mEnding.FinishOneLine();
             isSolved = true;
+            if (mBonus != null)
+            {
+                FindObjectOfType<ItemsBox>().MoveItemIn(mBonus);
+                mBonus = null;
+            }
             //this.mSceneObj.GetComponent<SceneObj>().QuizResolved();
         }
     }

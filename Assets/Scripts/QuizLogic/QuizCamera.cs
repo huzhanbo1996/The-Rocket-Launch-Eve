@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -15,10 +16,16 @@ public class QuizCamera : MonoBehaviour
     public int mCurrCaptureIndex;
     private SpriteRenderer mSpR;
     public List<Sprite> mInventory = new List<Sprite>();
+    public Sprite mSpBackGournd;
+    public int mScreenWidth;
+    public int mScreenHeight;
+    public bool isGrab = true;
+    public ItemCamera mItemCamera;
     private List<ICapturable> mCapturable = new List<ICapturable>();
     private SceneCtrl mSceneCtrl;
     private ItemsBox mItemsBox;
     private LayerMask mLayerBefore;
+
     //  size = scale * pixels / pixPerUnit
     //  scale = size / pixels * pixPerUnit
     private Vector2 mSpriteSize;  
@@ -28,6 +35,10 @@ public class QuizCamera : MonoBehaviour
         mCurrCaptureIndex = -1;
         mCurrReviewIndex = -1;
         mSpR = this.transform.Find("Screen").GetComponent<SpriteRenderer>();
+        mScreenWidth = mSpR.sprite.texture.width;
+        mScreenHeight = mSpR.sprite.texture.height;
+        //mSpR.sprite = mSpBackGournd;
+
         //mSpriteSize = new Vector2(
         //    mSpR.transform.localScale.x * mSpR.sprite.textureRect.width / mSpR.sprite.pixelsPerUnit,
         //    mSpR.transform.localScale.y * mSpR.sprite.textureRect.height / mSpR.sprite.pixelsPerUnit
@@ -50,6 +61,7 @@ public class QuizCamera : MonoBehaviour
     {
         if(Common.Utils.ClickedOn(mBtnExit))
         {
+            isGrab = true;
             Common.Utils.SetActiveLayer(mLayerBefore);
             this.gameObject.SetActive(false);
         }
@@ -62,13 +74,17 @@ public class QuizCamera : MonoBehaviour
                 {
                     Debug.Log(sceneObj.name);
                     var sp = capturable.GetPicture();
+                    Sprite newSp = null; 
 
                     if (!mInventory.Contains(sp) && sp != null)
                     {
-                        var newSp = Instantiate(sp);
-                        mInventory.Add(sp);
+                        var newTx = Instantiate(sp.texture);
+                        TextureScale.Bilinear(newTx, mScreenWidth, mScreenHeight);
+                        newSp = Sprite.Create(newTx, new Rect(0, 0, mScreenWidth, mScreenHeight), new Vector2(0, 0));
+                        mInventory.Add(newSp);
                     }
-                    mCurrCaptureIndex = mInventory.IndexOf(sp);
+                    mCurrCaptureIndex = mInventory.IndexOf(newSp);
+                    mCurrReviewIndex = mCurrCaptureIndex;
                 }
             }
         }
@@ -83,14 +99,15 @@ public class QuizCamera : MonoBehaviour
 
         if( mCurrReviewIndex == -1)
         {
-            if (mCurrCaptureIndex != -1)
-            {
-                mSpR.sprite = mInventory[mCurrCaptureIndex];
-            }
-            else
-            {
-                mSpR.sprite = null;
-            }
+            mSpR.sprite = mSpBackGournd;
+            //if (mCurrCaptureIndex != -1)
+            //{
+            //    mSpR.sprite = mInventory[mCurrCaptureIndex];
+            //}
+            //else
+            //{
+            //    mSpR.sprite = mSpBackGournd;
+            //}
         }
         else
         {
@@ -100,6 +117,9 @@ public class QuizCamera : MonoBehaviour
 
     private void OnEnable()
     {
+        //Start();
+        //isGrab = false;
+        //mSpR.sprite = mSpBackGournd;
         mLayerBefore = Common.Utils.GetActiveLayer();
         Common.Utils.SetActiveLayer("Camera");
         mCurrCaptureIndex = -1;

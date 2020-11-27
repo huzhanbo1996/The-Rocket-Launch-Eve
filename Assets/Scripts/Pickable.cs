@@ -21,8 +21,8 @@ public class Pickable : MonoBehaviour
         if (!isGaved && Common.Utils.ClickedOn(this.gameObject))
         {
             isGaved = true;
-            itemsBox.MoveItemIn(mItemBounus);
-            itemsBox.MoveItemIn(mItemBounus2);
+            if (mItemBounus != null) itemsBox.MoveItemIn(mItemBounus);
+            if (mItemBounus2 != null) itemsBox.MoveItemIn(mItemBounus2);
         }
     }
 }

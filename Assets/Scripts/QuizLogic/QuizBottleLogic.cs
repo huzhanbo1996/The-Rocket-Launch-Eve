@@ -59,7 +59,7 @@ public class QuizBottleLogic : MonoBehaviour
                     newBand.transform.localPosition = mCurrPosition;
                     newBand.transform.name = buttom.Key.name;
                     mCurrPosition += (Vector3)(Vector2.up * buttom.Value.textureRect.height
-                                                            / buttom.Value.pixelsPerUnit);
+                                                            / buttom.Value.pixelsPerUnit * 2);
                     mBottleBandsKeeper.Add(newBand);
                     Destroy(fake);
                 }
