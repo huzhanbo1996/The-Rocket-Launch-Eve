@@ -70,6 +70,7 @@ public class Quiz4NPC : MonoBehaviour, ICapturable
                     {
                         _tgt.isActive = true;
                     }
+                    mBigMsg.SetActive(false);
                     //tgt.isActive = true;
                 }
             }
@@ -81,11 +82,13 @@ public class Quiz4NPC : MonoBehaviour, ICapturable
             {
                 if (!tgt.isActive)  // initial state
                 {
-                    if(!tgt.talked)
-                    {
-                        ShowMsg(tgt.msg, mShowMsgTime);
-                        tgt.talked = true;
-                    }
+                    //if(!tgt.talked)
+                    //{
+                    //    ShowMsg(tgt.msg, mShowMsgTime);
+                    //    tgt.talked = true;
+                    //}
+                    ShowMsg(tgt.msg, mShowMsgTime);
+                    tgt.talked = true;
                 }
                 else // state 2
                 {
@@ -108,6 +111,18 @@ public class Quiz4NPC : MonoBehaviour, ICapturable
             }
         }
 
+        var talkedCnt = 0;
+        foreach (var tgt in mNPCs)
+        {
+            if (!tgt.isActive && tgt.talked)
+            {
+                talkedCnt++;
+            }
+        }
+        if (talkedCnt == 4)
+        {
+            mBigMsg.SetActive(true);
+        }
         if (mNowOrder == mAnsOrder && tmpLayer == -1)
         {
             tmpLayer = Common.Utils.GetActiveLayer();
@@ -119,7 +134,7 @@ public class Quiz4NPC : MonoBehaviour, ICapturable
 
     private void Ending()
     {
-        mBigMsg.SetActive(true);
+        //mBigMsg.SetActive(true);
         for (int i = 0; i < mNPCs.Count; i++)
         {
             mNPCs[i].msg = mSecMsg[i];
@@ -163,6 +178,7 @@ public class Quiz4NPC : MonoBehaviour, ICapturable
         {
             tgt.talked = false;
         }
+        mBigMsg.SetActive(false);
     }
     private void ShowMsg(GameObject msg, float time)
     {

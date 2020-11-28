@@ -20,6 +20,7 @@ public class ItemCamera : MonoBehaviour
         if(Common.Utils.ClickedOn(this.gameObject) && quizCamera.activeSelf == false)
         {
             var quiz = quizCamera.GetComponent<QuizCamera>();
+            FindObjectOfType<ItemsBox>().gameObject.transform.position += new Vector3(100, 100);
             // TODO
             // fix this hard code
             var w = 696;
@@ -28,6 +29,7 @@ public class ItemCamera : MonoBehaviour
             //mScreenSp.Resize(150, 150, TextureFormat.RGB24, false);
             //mScreenSp.Apply();
             quiz.mSpBackGournd = Sprite.Create(mScreenSp, new Rect(0, 0, w, h), new Vector2(0, 0));
+            FindObjectOfType<ItemsBox>().gameObject.transform.position -= new Vector3(100, 100);
             quizCamera.SetActive(true);
         }
     }

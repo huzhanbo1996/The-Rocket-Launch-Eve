@@ -18,7 +18,7 @@ public class QuizRotate : MonoBehaviour
     private List<KeyValuePair<GameObject,int>> mRotateGroupLeft = new List<KeyValuePair<GameObject, int>>();
     private List<KeyValuePair<GameObject,int>> mRotateGroupRight = new List<KeyValuePair<GameObject, int>>();
     private List<Vector3> mPosistions = new List<Vector3>();
-    private bool mResolved;
+    public bool mResolved;
     // Start is called before the first frame update
     void Start()
     {
@@ -87,14 +87,14 @@ public class QuizRotate : MonoBehaviour
         {
             FindObjectOfType<ComputerSwitch>().QuizResolved();
             mResolved = true;
-            foreach(var p in mRotateGroupRight)
-            {
-                Destroy(p.Key);
-            }
-            foreach(var p in mRotateGroupLeft)
-            {
-                Destroy(p.Key);
-            }
+            //foreach(var p in mRotateGroupRight)
+            //{
+            //    Destroy(p.Key);
+            //}
+            //foreach(var p in mRotateGroupLeft)
+            //{
+            //    Destroy(p.Key);
+            //}
             Destroy(mButtomLeft);
             Destroy(mButtomMiddle);
             Destroy(mButtomRight);

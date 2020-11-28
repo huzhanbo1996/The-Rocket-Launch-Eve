@@ -12,46 +12,50 @@ public class QuizFinal : MonoBehaviour
     public GameObject mObjAdd;
     public List<string> mAnsNameOrder;
     public bool isResolved;
+    public GameObject End;
+    private Dictionary<string, Sprite> mNameVSPic = new Dictionary<string, Sprite>();
     private QuizReception quizReception;
     private List<GameObject> itBk;
+    private List<GameObject> mNowOrd = new List<GameObject>();
     // Start is called before the first frame update
     void Start()
     {
+        End.SetActive(false);
         isResolved = false;
         quizReception = this.GetComponent<QuizReception>();
         itBk = new List<GameObject>(quizReception.GetItems().ToArray());
         this.GetComponent<SpriteRenderer>().sprite = mSpArea[mPhase];
+        for (int i = 0; i < mAnsNameOrder.Count; i++)
+        {
+            mNameVSPic.Add(mAnsNameOrder[i], mSpAdd[i]);
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (mPhase == mSpArea.Count)
+        if (isResolved)
         {
-            isResolved = true;
+            End.SetActive(true);
+            Common.Utils.SetActive(false);
+            if(Input.GetKeyDown(KeyCode.Escape))
+            {
+                Application.Quit();
+            }
             return;
         }
-        //this.GetComponent<SpriteRenderer>().sprite = mSpArea[mPhase];
         var its = quizReception.GetItems();
-        if (its.Count != itBk.Count)
+        if (mPhase == mSpArea.Count)
         {
-            GameObject newObj = null;
-            foreach (var obj in its)
+            int i;
+            for(i = 0; i < its.Count; i++)
             {
-                if (!itBk.Contains(obj))
+                if(mNowOrd[i].name.IndexOf(mAnsNameOrder[i]) < 0)
                 {
-                    newObj = obj;
                     break;
                 }
             }
-            if (newObj.name.IndexOf(mAnsNameOrder[mPhase]) > 0)
-            {
-                mObjAdd.GetComponent<SpriteRenderer>().sprite = mSpAdd[mPhase];
-                StartCoroutine(DelaySeconds(mTimeDelay));
-                mPhase++;
-
-            }
-            else
+            if (i != its.Count)
             {
                 foreach (var obj in its)
                 {
@@ -60,19 +64,47 @@ public class QuizFinal : MonoBehaviour
                 its.Clear();
                 //StartCoroutine(DelaySeconds(mTimeDelay));
                 mPhase = 0;
+                mNowOrd.Clear();
+                itBk = new List<GameObject>(quizReception.GetItems().ToArray());
                 mObjAdd.GetComponent<SpriteRenderer>().sprite = null;
                 this.GetComponent<SpriteRenderer>().sprite = mSpArea[mPhase];
+                Common.Utils.SetActiveLayer("Default");
+                Common.Utils.SetActive(true);
                 this.transform.parent.gameObject.SetActive(false);
+                return;
             }
-            //switch (mPhase)
-            //{
-            //    case 0:   
-            //        break;
-            //    case 1:
-            //        break;
-            //    case 2:
-            //        break;
-            //}
+            else
+            {
+                isResolved = true;
+                return;
+            }
+            
+        }
+        //this.GetComponent<SpriteRenderer>().sprite = mSpArea[mPhase];
+        
+        if (its.Count != itBk.Count)
+        {
+            GameObject newObj = null;
+            string name = "";
+            foreach (var obj in its)
+            {
+                if (!itBk.Contains(obj))
+                {
+                    newObj = obj;
+                    break;
+                }
+            }
+            foreach(var s in mAnsNameOrder)
+            {
+                if (newObj.name.IndexOf(s) > 0)
+                {
+                    name = s;
+                }
+            }
+            mNowOrd.Add(newObj);
+            mObjAdd.GetComponent<SpriteRenderer>().sprite = mNameVSPic[name];
+            StartCoroutine(DelaySeconds(mTimeDelay));
+            mPhase++;
         }
         itBk = new List<GameObject>(quizReception.GetItems().ToArray());
     }
@@ -82,6 +114,6 @@ public class QuizFinal : MonoBehaviour
         yield return new WaitForSeconds(delay);
         Common.Utils.SetActive(true);
         mObjAdd.GetComponent<SpriteRenderer>().sprite = null;
-        this.GetComponent<SpriteRenderer>().sprite = mSpArea[mPhase];
+        if (mPhase < mSpArea.Count) this.GetComponent<SpriteRenderer>().sprite = mSpArea[mPhase];
     }
 }
