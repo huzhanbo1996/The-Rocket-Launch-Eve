@@ -33,7 +33,7 @@ public class Item : MonoBehaviour
         {
             mSRender.sprite = picPicked;
             outLineMaterial.SetFloat("_Thickness", 10);
-            if (itemsBox != null) itemsBox.objPickedUp.Add(this.gameObject);
+            if (itemsBox != null && !itemsBox.objPickedUp.Contains(this.gameObject)) itemsBox.objPickedUp.Add(this.gameObject);
         }
 
         if(objToGive!= null && Common.Utils.ClickedOn(objToGive) && mSRender.sprite == picPicked)
@@ -58,7 +58,7 @@ public class Item : MonoBehaviour
         {
             mSRender.sprite = picIdle;
             outLineMaterial.SetFloat("_Thickness", 0);
-            if (itemsBox != null) itemsBox.objPickedUp.Remove(this.gameObject);
+            if (itemsBox != null && itemsBox.objPickedUp.Contains(this.gameObject)) itemsBox.objPickedUp.Remove(this.gameObject);
         }
     }
 

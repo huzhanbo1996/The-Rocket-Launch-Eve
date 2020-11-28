@@ -6,6 +6,7 @@ public class QuizB_A : MonoBehaviour
 {
     public GameObject mPieceBonus;
     public GameObject mAgreementBonus;
+    private List<ShowName> mShowName;
     private int cntReceived;
     private ItemsBox itemsBox;
     private QuizReception quizReception;
@@ -18,6 +19,9 @@ public class QuizB_A : MonoBehaviour
         cntReceived = 0;
         itemsBox = FindObjectOfType<ItemsBox>();
         quizReception = this.transform.Find("Area").GetComponent<QuizReception>();
+        mShowName = new List<ShowName>(this.transform.Find("Area").GetComponents<ShowName>());
+        mShowName[0].SetActive(true);
+        mShowName[1].SetActive(false);
     }
 
     // Update is called once per frame
@@ -41,6 +45,8 @@ public class QuizB_A : MonoBehaviour
 
         if (cntReceived == 1 && inventory.Count > 0 && inventory[0].name.IndexOf("Booze") > 0)
         {
+            mShowName[0].SetActive(false);
+            mShowName[1].SetActive(true);
             cntReceived++;
             itemsBox.MoveItemIn(mAgreementBonus);
             inventory.Clear();

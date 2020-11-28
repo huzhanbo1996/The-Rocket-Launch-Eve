@@ -82,13 +82,13 @@ public class Quiz4NPC : MonoBehaviour, ICapturable
             {
                 if (!tgt.isActive)  // initial state
                 {
-                    //if(!tgt.talked)
-                    //{
-                    //    ShowMsg(tgt.msg, mShowMsgTime);
-                    //    tgt.talked = true;
-                    //}
-                    ShowMsg(tgt.msg, mShowMsgTime);
-                    tgt.talked = true;
+                    if (!mBigMsg.activeSelf && !tgt.msg.activeSelf)
+                    {
+                        ShowMsg(tgt.msg, mShowMsgTime);
+                        tgt.talked = true;
+                    }
+                    //ShowMsg(tgt.msg, mShowMsgTime);
+                    //tgt.talked = true;
                 }
                 else // state 2
                 {
@@ -177,6 +177,7 @@ public class Quiz4NPC : MonoBehaviour, ICapturable
         foreach (var tgt in mNPCs)
         {
             tgt.talked = false;
+            tgt.msg.SetActive(false);
         }
         mBigMsg.SetActive(false);
     }

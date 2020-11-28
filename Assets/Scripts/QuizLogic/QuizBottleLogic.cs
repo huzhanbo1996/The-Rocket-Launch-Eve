@@ -43,6 +43,7 @@ public class QuizBottleLogic : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (mResolved) return;
         foreach(var buttun in mButtomsVSSprite)
         {
             buttun.Key.SetActive(false);
@@ -113,7 +114,7 @@ public class QuizBottleLogic : MonoBehaviour
             {
                 mResolved = true;
                 FindObjectOfType<ItemsBox>().MoveItemIn(mItemBeer);
-                mSceneObj.GetComponent<SceneObj>().QuizResolved();
+                //mSceneObj.GetComponent<SceneObj>().QuizResolved();
             }
         }
     }

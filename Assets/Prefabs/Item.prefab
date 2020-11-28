@@ -101,6 +101,7 @@ MonoBehaviour:
   objToGive2: {fileID: 0}
   objCarried: {fileID: 0}
   mKeephAfterUse: 0
+  outLineMaterial: {fileID: 0}
 --- !u!61 &1096579570772101513
 BoxCollider2D:
   m_ObjectHideFlags: 0

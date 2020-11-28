@@ -90,7 +90,7 @@ public class ComputerSwitch : MonoBehaviour
         //mSceneObj.relatedQuiz.gameObject.SetActive(false);
         //Common.Utils.SetActiveLayer("Default");
         isResolve = true;
-        SRofQuizObj(mSceneObj.relatedQuiz).sprite = mSps[mStage];
+        //SRofQuizObj(mSceneObj.relatedQuiz).sprite = mSps[mStage];
         FindObjectOfType<LevelCtrl>().LevelUp();
     }
 

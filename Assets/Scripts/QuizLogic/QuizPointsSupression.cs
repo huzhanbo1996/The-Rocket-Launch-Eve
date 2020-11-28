@@ -113,6 +113,7 @@ public class QuizPointsSupression : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (mStage - 1 < 0 || mStage - 1 >= mXs.Count) return;
         mZeroX = mXs[mStage - 1];
         mZeroY = mYs[mStage - 1];
         mSpriteDistance = mParamDistance = mDs[mStage - 1];

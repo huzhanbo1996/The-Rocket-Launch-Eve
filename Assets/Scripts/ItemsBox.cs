@@ -142,6 +142,18 @@ public class ItemsBox : MonoBehaviour
             var mInventory = mInventoryList[idx];
             for (int i = 0; i < mInventory.Length; i++)
             {
+                if (mInventory[i] == obj)
+                {
+                    mInventory[i] = null;
+                }
+            }
+        }
+
+        for (int idx = 0; idx < mInventoryList.Count; idx++)
+        {
+            var mInventory = mInventoryList[idx];
+            for (int i = 0; i < mInventory.Length; i++)
+            {
                 if (mInventory[i] == null)
                 {
                     var col = i / mStorageY;
@@ -150,7 +162,8 @@ public class ItemsBox : MonoBehaviour
                     obj.transform.localPosition = new Vector3(
                         col * sizeOfItemX / mPixelsPerUnit + sizeOfItemX / 2.0f / mPixelsPerUnit,
                         -raw * sizeOfItemY / mPixelsPerUnit - sizeOfItemY / 2.0f / mPixelsPerUnit,
-                        obj.transform.position.z);
+                        -2);
+                        //obj.transform.localPosition.z);
                     mInventory[i] = obj;
                     obj.SetActive(true);
                     return true;
@@ -187,6 +200,7 @@ public class ItemsBox : MonoBehaviour
                         obj.transform.position.z);
                     obj.SetActive(true);
                     mInventory[i] = obj;
+                    //Rearangement();
                     return true;
                 }
             }
@@ -211,12 +225,31 @@ public class ItemsBox : MonoBehaviour
                 {
                     mInventory[i] = null;
                     Destroy(it);
+                    Rearangement();
                     return true;
                 }
             }
         }
         Debug.LogError("No items found in imtesBox : " + it.name);
         return false;
+    }
+
+    private void Rearangement()
+    {
+        for (int idx = 0; idx < mInventoryList.Count; idx++)
+        {
+            var mInventory = mInventoryList[idx];
+            for (int i = 0; i < mInventory.Length; i++)
+            {
+                var obj = mInventory[i];
+                mInventory[i] = null;
+                if (obj != null)
+                {
+                    MoveItemIn(obj);
+                }
+            }
+        }
+
     }
 
     public bool ContainsCloneOf(GameObject obj)
