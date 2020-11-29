@@ -9,8 +9,7 @@ public class NPCN_A : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        mEnding = FindObjectOfType<Ending>();
-        Debug.Assert(mEnding != null);
+        //mEnding = FindObjectOfType<Ending>();
         mQuizReception = GetComponent<QuizReception>();
         Debug.Assert(mQuizReception != null);
     }
@@ -20,7 +19,7 @@ public class NPCN_A : MonoBehaviour
     {
         if(mQuizReception.GetItems().Count > 0)
         {
-            mEnding.FinishOneLine();
+            //mEnding.FinishOneLine();
             mQuizReception.GetItems().Clear();
         }
     }

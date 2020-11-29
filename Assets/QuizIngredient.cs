@@ -7,6 +7,7 @@ public class QuizIngredient : MonoBehaviour
     public List<GameObject> mObjs;
     public List<GameObject> mShows;
     public bool enable;
+    public GameObject mCamera;
 
     private ItemsBox mItemsBox;
     private Dictionary<GameObject, GameObject> mObjVSShow = new Dictionary<GameObject, GameObject>();
@@ -43,8 +44,9 @@ public class QuizIngredient : MonoBehaviour
                     return;
                 }
             }
-            if(Common.Utils.ClickedAnywhereOut(this.gameObject) &&
-               !Common.Utils.ClickedOnChildenOf(mItemsBox.gameObject)
+            if( Common.Utils.ClickedAnywhereOut(this.gameObject) &&
+                !Common.Utils.ClickedOnChildenOf(mItemsBox.gameObject) &&
+                !mCamera.activeSelf
                )
             {
                 Common.Utils.SetActiveLayer("Default");

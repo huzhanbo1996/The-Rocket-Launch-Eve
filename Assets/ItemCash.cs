@@ -35,7 +35,7 @@ public class ItemCash : MonoBehaviour
             if (itemsBox != null) itemsBox.objPickedUp.Add(this.gameObject);
         }
 
-        if (objToGive != null && Common.Utils.ClickedOnChildenOf(objToGive) && mSRender.sprite == picPicked)
+        if (objToGive != null && Common.Utils.ClickedOnChildenOf(objToGive) && objToGive.activeSelf && mSRender.sprite == picPicked)
         {
             var newItem = Instantiate(objCarried);
             objToGive.transform.Find("Area").GetComponent<QuizReception>().AddItem(newItem);

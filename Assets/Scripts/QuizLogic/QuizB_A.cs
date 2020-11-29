@@ -43,12 +43,26 @@ public class QuizB_A : MonoBehaviour
             }
         }
 
-        if (cntReceived == 1 && inventory.Count > 0 && inventory[0].name.IndexOf("Booze") > 0)
+        if (cntReceived == 1 && inventory.Count > 0)
         {
-            mShowName[0].SetActive(false);
-            mShowName[1].SetActive(true);
-            cntReceived++;
-            itemsBox.MoveItemIn(mAgreementBonus);
+            if(inventory[0].name.IndexOf("Booze") > 0)
+            {
+                mShowName[0].SetActive(false);
+                mShowName[1].SetActive(true);
+                cntReceived++;
+                itemsBox.MoveItemIn(mAgreementBonus);
+                inventory.Clear();
+            }
+            else
+            {
+                itemsBox.MoveItemIn(inventory[0]);
+                inventory.Clear();
+            }
+            
+        }
+        if (cntReceived == 2 && inventory.Count > 0)
+        {
+            itemsBox.MoveItemIn(inventory[0]);
             inventory.Clear();
         }
         //// first a coin

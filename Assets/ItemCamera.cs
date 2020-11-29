@@ -67,10 +67,10 @@ public class ItemCamera : MonoBehaviour
         RenderTexture.active = null; // JC: added to avoid errors  
         GameObject.Destroy(rt);
         // 最后将这些纹理数据，成一个png图片文件  
-        byte[] bytes = screenShot.EncodeToPNG();
-        string filename = Application.dataPath + "/Screenshot.png";
-        System.IO.File.WriteAllBytes(filename, bytes);
-        Debug.Log(string.Format("截屏了一张照片: {0}", filename));
+        //byte[] bytes = screenShot.EncodeToPNG();
+        //string filename = Application.dataPath + "/Screenshot.png";
+        //System.IO.File.WriteAllBytes(filename, bytes);
+        //Debug.Log(string.Format("截屏了一张照片: {0}", filename));
 
         return screenShot;
     }
