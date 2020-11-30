@@ -8,15 +8,19 @@ public class ItemCamera : MonoBehaviour
     public Texture2D mScreenSp;
     public Camera mMainCamera;
     public GameObject quizCamera;
+    public List<GameObject> mNoCameraScenes;
+    private SceneCtrl mSceneCtrl;
     // Start is called before the first frame update
     void Start()
     {
-        
+        mSceneCtrl = FindObjectOfType<SceneCtrl>();
     }
 
     // Update is called once per frame
     void Update()
     {
+        var scene = mSceneCtrl.GetCurrScene();
+        if (mNoCameraScenes.Contains(scene)) return;
         if(Common.Utils.ClickedOn(this.gameObject) && quizCamera.activeSelf == false)
         {
             var quiz = quizCamera.GetComponent<QuizCamera>();

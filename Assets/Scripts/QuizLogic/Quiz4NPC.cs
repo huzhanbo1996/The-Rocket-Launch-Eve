@@ -12,6 +12,7 @@ public class Quiz4NPC : MonoBehaviour, ICapturable
     public GameObject mRelatedSceneObj;
     public GameObject mItemBonus;
     public GameObject mBigMsg;
+    public GameObject mBigMsg2;
     public Sprite mPictureHold;
 
     private string mNowOrder;
@@ -43,6 +44,7 @@ public class Quiz4NPC : MonoBehaviour, ICapturable
     // Start is called before the first frame update
     void Start()
     {
+        mBigMsg2.SetActive(false);
         mBigMsg.SetActive(false);
         tmpLayer = -1;
         mQuizReception = this.transform.Find("Area").GetComponent<QuizReception>();
@@ -59,6 +61,24 @@ public class Quiz4NPC : MonoBehaviour, ICapturable
 
         // don't render then, just for knowing them received
         var invenotory = mQuizReception.GetItems();
+
+        if(Common.Utils.ClickedOnChildenOf(this.gameObject))
+        {
+            var talkedCnt = 0;
+            foreach (var tgt in mNPCs)
+            {
+                if (tgt.talked && !tgt.isActive)
+                {
+                    talkedCnt++;
+                }
+            }
+            if (talkedCnt == 4)
+            {
+                mBigMsg.SetActive(true);
+            }
+        }
+
+        
         foreach (var obj in invenotory)
         {
             obj.SetActive(false);
@@ -69,8 +89,8 @@ public class Quiz4NPC : MonoBehaviour, ICapturable
                     foreach (var _tgt in mNPCs)
                     {
                         _tgt.isActive = true;
+                        mBigMsg.SetActive(false);
                     }
-                    mBigMsg.SetActive(false);
                     //tgt.isActive = true;
                 }
             }
@@ -82,7 +102,7 @@ public class Quiz4NPC : MonoBehaviour, ICapturable
             {
                 if (!tgt.isActive)  // initial state
                 {
-                    if (!mBigMsg.activeSelf && !tgt.msg.activeSelf)
+                    if (!tgt.msg.activeSelf)
                     {
                         ShowMsg(tgt.msg, mShowMsgTime);
                         tgt.talked = true;
@@ -93,35 +113,32 @@ public class Quiz4NPC : MonoBehaviour, ICapturable
                 else // state 2
                 {
                     //ShowMsg(tgt.msg, mShowMsgTime);
-                    if(tgt.musicSign.activeSelf)
+                    if(mPictureHold == null)
                     {
-                        foreach(var clr in mNPCs)
+                        if (tgt.musicSign.activeSelf)
                         {
-                            clr.musicSign.SetActive(false);
+                            foreach (var clr in mNPCs)
+                            {
+                                clr.musicSign.SetActive(false);
+                            }
+                            mNowOrder = "";
                         }
-                        mNowOrder = "";
-                    }
-                    else
-                    {
-                        tgt.musicSign.SetActive(true);
-                        mNowOrder += tgt.num;
-                    }
-                    
+                        else
+                        {
+                            tgt.musicSign.SetActive(true);
+                            mNowOrder += tgt.num;
+                        }
+                    } 
                 }
             }
         }
 
-        var talkedCnt = 0;
         foreach (var tgt in mNPCs)
         {
-            if (!tgt.isActive && tgt.talked)
+            if (tgt.isActive && mPictureHold != null)
             {
-                talkedCnt++;
+                mBigMsg2.SetActive(true);
             }
-        }
-        if (talkedCnt == 4)
-        {
-            mBigMsg.SetActive(true);
         }
         if (mNowOrder == mAnsOrder && tmpLayer == -1)
         {
@@ -161,6 +178,7 @@ public class Quiz4NPC : MonoBehaviour, ICapturable
         if (mNPCs[0].isActive)
         {
             ret = mPictureHold;
+            mBigMsg2.SetActive(false);
             mPictureHold = null;
         }
         return ret;

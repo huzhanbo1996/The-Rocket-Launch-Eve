@@ -61,6 +61,7 @@ public class Quiz9Puzzle : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (isResolved) return;
         foreach(var piece in mPieces)
         {
             if(Common.Utils.ClickedOn(piece.obj))

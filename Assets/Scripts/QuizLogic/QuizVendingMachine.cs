@@ -28,6 +28,7 @@ public class QuizVendingMachine : MonoBehaviour
         {
             cntReceived++;
             itemsBox.MoveItemIn(mPieceBonus);
+            quizReception.GetRefuse().Add(inventory[0]);
             quizReception.RemoveItem(inventory[0]);
         }
         else if (inventory.Count > 0)

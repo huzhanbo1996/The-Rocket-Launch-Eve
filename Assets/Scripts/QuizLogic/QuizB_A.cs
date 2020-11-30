@@ -28,29 +28,22 @@ public class QuizB_A : MonoBehaviour
     void Update()
     {
         var inventory = quizReception.GetItems();
-        if (cntReceived == 0 && inventory.Count > 0)
+        if (cntReceived <2 && inventory.Count > 0)
         {
             if(inventory[0].name.IndexOf("Coin") > 0)
             {
                 cntReceived++;
                 if (mPieceBonus != null) itemsBox.MoveItemIn(mPieceBonus);
+                quizReception.GetRefuse().Add(inventory[0]);
                 inventory.Clear();
             }
-            else
-            {
-                itemsBox.MoveItemIn(inventory[0]);
-                inventory.Clear();
-            }
-        }
-
-        if (cntReceived == 1 && inventory.Count > 0)
-        {
-            if(inventory[0].name.IndexOf("Booze") > 0)
+            else if (inventory[0].name.IndexOf("Booze") > 0)
             {
                 mShowName[0].SetActive(false);
                 mShowName[1].SetActive(true);
                 cntReceived++;
                 itemsBox.MoveItemIn(mAgreementBonus);
+                quizReception.GetRefuse().Add(inventory[0]);
                 inventory.Clear();
             }
             else
@@ -58,34 +51,11 @@ public class QuizB_A : MonoBehaviour
                 itemsBox.MoveItemIn(inventory[0]);
                 inventory.Clear();
             }
-            
         }
-        if (cntReceived == 2 && inventory.Count > 0)
+        if (cntReceived >= 2 && inventory.Count > 0)
         {
             itemsBox.MoveItemIn(inventory[0]);
             inventory.Clear();
         }
-        //// first a coin
-        //if (cntReceived==0 && inventory.Count > 0) 
-        //{
-        //    cntReceived++;
-        //    itemsBox.MoveItemIn(mPieceBonus);
-        //    quizReception.RemoveItem(inventory[0]);
-        //}
-        //if (cntReceived == 1 && inventory.Count > 0 )
-        //{   
-        //    // second a booze
-        //    if(Common.Utils.TrimClone(inventory[0].gameObject.name).IndexOf("Booze") >= 0)
-        //    {
-        //        itemsBox.MoveItemIn(mAgreementBonus);
-        //        cntReceived++;
-        //        mEnding.FinishOneLine();
-        //    }
-        //    else
-        //    {
-        //        itemsBox.MoveItemIn(inventory[0]);
-        //        quizReception.RemoveItem(inventory[0]);
-        //    }
-        //}
     }
 }

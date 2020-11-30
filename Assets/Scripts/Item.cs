@@ -36,14 +36,16 @@ public class Item : MonoBehaviour
             if (itemsBox != null && !itemsBox.objPickedUp.Contains(this.gameObject)) itemsBox.objPickedUp.Add(this.gameObject);
         }
 
-        if(objToGive!= null && Common.Utils.ClickedOn(objToGive) && mSRender.sprite == picPicked)
+        if( objToGive!= null && Common.Utils.ClickedOn(objToGive) && mSRender.sprite == picPicked && 
+            !objToGive.GetComponent<QuizReception>().IsRefuse(this.gameObject.name))
         {
             var newItem = Instantiate(objCarried);
             objToGive.GetComponent<QuizReception>().AddItem(newItem);
             if (!mKeephAfterUse) itemsBox.RemoveItem(this.gameObject);
         }
 
-        if (objToGive2 != null && Common.Utils.ClickedOn(objToGive2) && mSRender.sprite == picPicked)
+        if (objToGive2 != null && Common.Utils.ClickedOn(objToGive2) && mSRender.sprite == picPicked &&
+            !objToGive2.GetComponent<QuizReception>().IsRefuse(this.gameObject.name))
         {
             var newItem = Instantiate(objCarried);
             objToGive2.GetComponent<QuizReception>().AddItem(newItem);
@@ -51,9 +53,12 @@ public class Item : MonoBehaviour
         }
 
 
+        //if (Common.Utils.ClickedAnywhereOut(this.gameObject) && 
+        //    (objToGive==null || !Common.Utils.ClickedOn(objToGive)) &&
+        //    (objToGive2==null || !Common.Utils.ClickedOn(objToGive2))
+        //    )
         if (Common.Utils.ClickedAnywhereOut(this.gameObject) && 
-            (objToGive==null || !Common.Utils.ClickedOn(objToGive)) &&
-            (objToGive2==null || !Common.Utils.ClickedOn(objToGive2))
+            Common.Utils.ClickedOnChildenOf(FindObjectOfType<ItemsBox>().gameObject)
             )
         {
             mSRender.sprite = picIdle;

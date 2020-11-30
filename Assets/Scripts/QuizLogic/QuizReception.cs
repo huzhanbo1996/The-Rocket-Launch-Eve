@@ -5,6 +5,7 @@ using UnityEngine;
 public class QuizReception : MonoBehaviour
 {
     public bool mIsFake;
+    private List<GameObject> mRefuseObjs = new List<GameObject>();
     private List<GameObject> mInventory = new List<GameObject>();
     private Rect mArea;
     // Start is called before the first frame update
@@ -38,6 +39,23 @@ public class QuizReception : MonoBehaviour
         
     }
 
+    public bool IsRefuse(string obj)
+    {
+        foreach (var rf in mRefuseObjs)
+        {
+            if (Common.Utils.TrimClone(obj).IndexOf(Common.Utils.TrimClone(rf.name)) >= 0) return true;
+        }
+        return false;
+    }
+    //public bool IsRefuse(GameObject obj)
+    //{
+    //    foreach (var rf in mRefuseObjs)
+    //    {
+    //        if (rf == obj) return true;
+    //    }
+    //    return false;
+    //}
+
     public void AddItem(GameObject item)
     {
         Debug.Assert(item != null);
@@ -54,6 +72,11 @@ public class QuizReception : MonoBehaviour
             item.SetActive(false);
         }
         mInventory.Add(item);
+    }
+
+    public List<GameObject> GetRefuse()
+    {
+        return mRefuseObjs;
     }
 
     public List<GameObject> GetItems()
