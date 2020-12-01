@@ -181,6 +181,7 @@ public class QuizPointsSupression : MonoBehaviour
             mStage++;
             if (mStage <= 3)
             {
+                FindObjectOfType<SoundEffect>().Play(SoundEffect.SOUND_TYPE.QUIZ);
                 Clear();
                 Set(mStage);
             }

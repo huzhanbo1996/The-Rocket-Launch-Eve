@@ -81,6 +81,7 @@ public class QuizCamera : MonoBehaviour
                         var newTx = Instantiate(sp.texture);
                         TextureScale.Bilinear(newTx, mScreenWidth, mScreenHeight);
                         newSp = Sprite.Create(newTx, new Rect(0, 0, mScreenWidth, mScreenHeight), new Vector2(0, 0));
+                        FindObjectOfType<SoundEffect>().Play(SoundEffect.SOUND_TYPE.PICK);
                         mInventory.Add(newSp);
                     }
                     mCurrCaptureIndex = mInventory.IndexOf(newSp);

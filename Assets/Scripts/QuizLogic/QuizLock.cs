@@ -81,6 +81,7 @@ public class QuizLock : MonoBehaviour
             //    SceneObj.transform.localPosition.y,
             //    mQuizBonus.transform.position.z
             //    );
+            FindObjectOfType<SoundEffect>().Play(SoundEffect.SOUND_TYPE.QUIZ);
             mQuizBonus.SetActive(true);
             isResolved = true;
             SceneObj.GetComponent<SpriteRenderer>().sprite = mSpScneObj2;

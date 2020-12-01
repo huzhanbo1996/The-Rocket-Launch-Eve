@@ -119,6 +119,7 @@ public class QuizHuaRong : MonoBehaviour
             if(piece.isSp && piece.position == mAnsPosition)
             {
                 mObjTOGive.SetActive(true);
+                FindObjectOfType<SoundEffect>().Play(SoundEffect.SOUND_TYPE.QUIZ);
                 //mItemsBox.MoveItemIn(mObjTOGive);
                 mSceneObj.GetComponent<SceneObj>().QuizResolved();
             }

@@ -19,10 +19,15 @@ public class ItemCamera : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        var scene = mSceneCtrl.GetCurrScene();
-        if (mNoCameraScenes.Contains(scene)) return;
         if(Common.Utils.ClickedOn(this.gameObject) && quizCamera.activeSelf == false)
         {
+            var scene = mSceneCtrl.GetCurrScene();
+            if (mNoCameraScenes.Contains(scene))
+            {
+                FindObjectOfType<SoundEffect>().Play(SoundEffect.SOUND_TYPE.ERROR);
+                return;
+            }
+
             var quiz = quizCamera.GetComponent<QuizCamera>();
             FindObjectOfType<ItemsBox>().gameObject.transform.position += new Vector3(100, 100);
             // TODO

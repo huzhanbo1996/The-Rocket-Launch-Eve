@@ -87,6 +87,7 @@ public class ComputerSwitch : MonoBehaviour
 
     public void QuizResolved()
     {
+        FindObjectOfType<SoundEffect>().Play(SoundEffect.SOUND_TYPE.QUIZ);
         //mSceneObj.relatedQuiz.gameObject.SetActive(false);
         //Common.Utils.SetActiveLayer("Default");
         isResolve = true;

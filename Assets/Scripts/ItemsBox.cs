@@ -24,9 +24,11 @@ public class ItemsBox : MonoBehaviour
     private Rect mSpriteTextureRect;
     private float mPixelsPerUnit;
     private List<GameObject[]> mInventoryList = new List<GameObject[]>();
+    private SoundEffect mSE;
     // Start is called before the first frame update
     void Start()
     {
+        mSE = FindObjectOfType<SoundEffect>();
         Axis[2].transform.position = Axis[1].transform.position = Axis[0].transform.position;
         Axis[1].transform.position += (Vector3)(Vector2.up * mHideUpDown);
         Axis[2].transform.position += (Vector3)(Vector2.up * mHideUpDown * 2);
@@ -166,6 +168,7 @@ public class ItemsBox : MonoBehaviour
                         //obj.transform.localPosition.z);
                     mInventory[i] = obj;
                     obj.SetActive(true);
+                    mSE.Play(SoundEffect.SOUND_TYPE.PICK);
                     return true;
                 }
             }
@@ -201,6 +204,7 @@ public class ItemsBox : MonoBehaviour
                     obj.SetActive(true);
                     mInventory[i] = obj;
                     //Rearangement();
+                    mSE.Play(SoundEffect.SOUND_TYPE.PICK);
                     return true;
                 }
             }
@@ -236,6 +240,7 @@ public class ItemsBox : MonoBehaviour
 
     private void Rearangement()
     {
+        mSE.SetActive(false);
         for (int idx = 0; idx < mInventoryList.Count; idx++)
         {
             var mInventory = mInventoryList[idx];
@@ -249,7 +254,7 @@ public class ItemsBox : MonoBehaviour
                 }
             }
         }
-
+        mSE.SetActive(true);
     }
 
     public bool ContainsCloneOf(GameObject obj)

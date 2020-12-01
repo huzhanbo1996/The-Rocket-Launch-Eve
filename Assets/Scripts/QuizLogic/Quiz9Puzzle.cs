@@ -94,6 +94,7 @@ public class Quiz9Puzzle : MonoBehaviour
         }
         if(ans == "12345678")
         {
+            FindObjectOfType<SoundEffect>().Play(SoundEffect.SOUND_TYPE.QUIZ);
             isResolved = true;
         }
         Render();
