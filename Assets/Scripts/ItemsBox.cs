@@ -25,9 +25,11 @@ public class ItemsBox : MonoBehaviour
     private float mPixelsPerUnit;
     private List<GameObject[]> mInventoryList = new List<GameObject[]>();
     private SoundEffect mSE;
+    private bool mDuringArragement;
     // Start is called before the first frame update
     void Start()
     {
+        mDuringArragement = false;
         mSE = FindObjectOfType<SoundEffect>();
         Axis[2].transform.position = Axis[1].transform.position = Axis[0].transform.position;
         Axis[1].transform.position += (Vector3)(Vector2.up * mHideUpDown);
@@ -136,7 +138,7 @@ public class ItemsBox : MonoBehaviour
         return true;   
     }
 
-    public bool MoveItemIn(GameObject obj)
+    public bool MoveItemIn(GameObject obj, bool duringPersist = false)
     {
         Debug.Assert(obj != null);
         for (int idx = 0; idx < mInventoryList.Count; idx++)
@@ -168,6 +170,10 @@ public class ItemsBox : MonoBehaviour
                         //obj.transform.localPosition.z);
                     mInventory[i] = obj;
                     obj.SetActive(true);
+                    if (!mDuringArragement && !duringPersist) 
+                    {
+                        FindObjectOfType<Persist>().AddItem(obj.GetComponent<Item>());
+                    }
                     mSE.Play(SoundEffect.SOUND_TYPE.PICK);
                     return true;
                 }
@@ -204,6 +210,7 @@ public class ItemsBox : MonoBehaviour
                     obj.SetActive(true);
                     mInventory[i] = obj;
                     //Rearangement();
+                    FindObjectOfType<Persist>().AddItem(obj.GetComponent<Item>());
                     mSE.Play(SoundEffect.SOUND_TYPE.PICK);
                     return true;
                 }
@@ -228,6 +235,7 @@ public class ItemsBox : MonoBehaviour
                 if (mInventory[i] == it)
                 {
                     mInventory[i] = null;
+                    FindObjectOfType<Persist>().RemoveItem(it.GetComponent<Item>().picIdle);
                     Destroy(it);
                     Rearangement();
                     return true;
@@ -241,6 +249,7 @@ public class ItemsBox : MonoBehaviour
     private void Rearangement()
     {
         mSE.SetActive(false);
+        mDuringArragement = true;
         for (int idx = 0; idx < mInventoryList.Count; idx++)
         {
             var mInventory = mInventoryList[idx];
@@ -254,6 +263,7 @@ public class ItemsBox : MonoBehaviour
                 }
             }
         }
+        mDuringArragement = false;
         mSE.SetActive(true);
     }
 

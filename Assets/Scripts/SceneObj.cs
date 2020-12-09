@@ -94,6 +94,7 @@ public class SceneObj : MonoBehaviour
         {
             bool ret = itemsBox.AddItem(relatedItem, picIdle, picPicked, objToGive, objCarried);
             Debug.Assert(ret); // get false only if itemsbox is full, meaning should redesign the itemsbox
+            FindObjectOfType<Persist>().AddDestroy(this.gameObject);
             Destroy(this.gameObject);
         }
 

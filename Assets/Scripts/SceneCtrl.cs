@@ -79,5 +79,6 @@ public class SceneCtrl : MonoBehaviour
         {
             ui.transform.position += move;
         }
+        FindObjectOfType<Persist>().SaveToFile();
     }
 }
