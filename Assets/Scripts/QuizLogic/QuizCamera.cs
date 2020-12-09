@@ -5,7 +5,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class QuizCamera : MonoBehaviour
+public class QuizCamera : MonoBehaviour, IQuizSerializable
 {
     public GameObject mBtnExit;
     public GameObject mBtnCapture;
@@ -16,6 +16,7 @@ public class QuizCamera : MonoBehaviour
     public int mCurrCaptureIndex;
     private SpriteRenderer mSpR;
     public List<Sprite> mInventory = new List<Sprite>();
+    public List<Sprite> mReceivedPic = new List<Sprite>();
     public Sprite mSpBackGournd;
     public int mScreenWidth;
     public int mScreenHeight;
@@ -83,6 +84,7 @@ public class QuizCamera : MonoBehaviour
                         newSp = Sprite.Create(newTx, new Rect(0, 0, mScreenWidth, mScreenHeight), new Vector2(0, 0));
                         FindObjectOfType<SoundEffect>().Play(SoundEffect.SOUND_TYPE.PICK);
                         mInventory.Add(newSp);
+                        mReceivedPic.Add(sp);
                     }
                     mCurrCaptureIndex = mInventory.IndexOf(newSp);
                     mCurrReviewIndex = mCurrCaptureIndex;
@@ -125,5 +127,28 @@ public class QuizCamera : MonoBehaviour
         Common.Utils.SetActiveLayer("Camera");
         mCurrCaptureIndex = -1;
         mCurrReviewIndex = -1;
+    }
+
+    public QuizData Serialize()
+    {
+        var ret = new QuizData();
+        foreach(var pic in mReceivedPic)
+        {
+            ret.mStringData.Add(FindObjectOfType<Persist>().GetResourcePath(pic));
+        }
+        return ret;
+    }
+
+    public void Deserialize(QuizData data)
+    {
+        foreach(var s in data.mStringData)
+        {
+            var sp = Resources.Load<Sprite>(s);
+            var newTx = Instantiate(sp.texture);
+            TextureScale.Bilinear(newTx, mScreenWidth, mScreenHeight);
+            var newSp = Sprite.Create(newTx, new Rect(0, 0, mScreenWidth, mScreenHeight), new Vector2(0, 0));
+            mInventory.Add(newSp);
+            mReceivedPic.Add(sp);
+        }
     }
 }

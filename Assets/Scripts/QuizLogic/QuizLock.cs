@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Common;
 
-public class QuizLock : MonoBehaviour
+public class QuizLock : MonoBehaviour, IQuizSerializable
 {
     public string mAllCodes;
     public string mInitialCode;
@@ -12,7 +12,7 @@ public class QuizLock : MonoBehaviour
     public GameObject SceneObj;
     public GameObject mQuizBonus;
     public Sprite mSpScneObj2;
-    public bool isResolved;
+    public bool isResolved = false;
 
     public class Code
     {
@@ -33,7 +33,7 @@ public class QuizLock : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        isResolved = false;
+        // isResolved = false;
         mItemsBox = FindObjectOfType<ItemsBox>();
         var childCodes = this.transform.Find("Codes");
         for (int i = 0; i < childCodes.childCount; i++)
@@ -103,6 +103,24 @@ public class QuizLock : MonoBehaviour
         {
             string code = mNowCode[i].ToString().ToUpper();
             mCodes[i].obj.GetComponent<SpriteRenderer>().sprite = mCodeVSSprite[code];
+        }
+    }
+
+    public QuizData Serialize()
+    {
+        var ret = new QuizData();
+        ret.mBoolData.Add(isResolved);
+        return ret;
+    }
+
+    public void Deserialize(QuizData data)
+    {
+        isResolved = data.mBoolData[0];
+        if (isResolved)
+        {
+            mQuizBonus.SetActive(true);
+            SceneObj.GetComponent<SpriteRenderer>().sprite = mSpScneObj2;
+            SceneObj.GetComponent<SpriteRenderer>().GetComponent<Collider2D>().enabled = false;
         }
     }
 }

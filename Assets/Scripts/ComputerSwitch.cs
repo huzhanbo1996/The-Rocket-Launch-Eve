@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ComputerSwitch : MonoBehaviour
+public class ComputerSwitch : MonoBehaviour, IQuizSerializable
 {
     public int mStage;
     public bool isResolve;
@@ -43,12 +43,12 @@ public class ComputerSwitch : MonoBehaviour
             mIsSetup = true;
             this.gameObject.GetComponent<Collider2D>().enabled = true;
         }
-        mItemsBox = FindObjectOfType<ItemsBox>();
-        for (int i = 0; i < 3; i++)
-        {
-            var sp = Instantiate(Resources.Load<Sprite>(RESOURCES_PATH + "/" + i.ToString())) as Sprite;
-            mSps.Add(sp);
-        }
+        // mItemsBox = FindObjectOfType<ItemsBox>();
+        // for (int i = 0; i < 3; i++)
+        // {
+        //     var sp = Instantiate(Resources.Load<Sprite>(RESOURCES_PATH + "/" + i.ToString())) as Sprite;
+        //     mSps.Add(sp);
+        // }
         switch (mStage)
         {
             case 0:
@@ -99,5 +99,21 @@ public class ComputerSwitch : MonoBehaviour
     {
         mStage++;
         isResolve = false;
+    }
+
+    public QuizData Serialize()
+    {
+        var ret = new QuizData();
+        ret.mBoolData.Add(mIsSetup);
+        ret.mBoolData.Add(isResolve);
+        ret.mIntData.Add(mStage);
+        return ret;
+    }
+
+    public void Deserialize(QuizData data)
+    {
+        mIsSetup = data.mBoolData[0];
+        isResolve = data.mBoolData[1];
+        mStage = data.mIntData[0];
     }
 }

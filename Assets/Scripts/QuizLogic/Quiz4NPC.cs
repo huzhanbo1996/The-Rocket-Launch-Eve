@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Common;
 
-public class Quiz4NPC : MonoBehaviour, ICapturable
+public class Quiz4NPC : MonoBehaviour, ICapturable, IQuizSerializable
 {
     public List<GameObject> mNPCinOrder;
     public List<GameObject> mSecMsg;
@@ -18,7 +18,6 @@ public class Quiz4NPC : MonoBehaviour, ICapturable
     private string mNowOrder;
     private QuizReception mQuizReception;
     private List<NPC> mNPCs = new List<NPC>();
-    private LayerMask tmpLayer;
     private class NPC
     {
         public GameObject obj;
@@ -41,12 +40,12 @@ public class Quiz4NPC : MonoBehaviour, ICapturable
         }
     }
 
+    private bool isResolved = false;
     // Start is called before the first frame update
     void Start()
     {
         mBigMsg2.SetActive(false);
         mBigMsg.SetActive(false);
-        tmpLayer = -1;
         mQuizReception = this.transform.Find("Area").GetComponent<QuizReception>();
         for (int i = 0; i < mNPCinOrder.Count; i++)
         {
@@ -140,9 +139,9 @@ public class Quiz4NPC : MonoBehaviour, ICapturable
                 mBigMsg2.SetActive(true);
             }
         }
-        if (mNowOrder == mAnsOrder && tmpLayer == -1)
+        if (mNowOrder == mAnsOrder)
         {
-            tmpLayer = Common.Utils.GetActiveLayer();
+            isResolved = true;
             Common.Utils.SetActive(false);
             Ending();
         }
@@ -223,5 +222,34 @@ public class Quiz4NPC : MonoBehaviour, ICapturable
         msg.SetActive(true);
         yield return new WaitForSeconds(delay2);
         msg.SetActive(false);
+    }
+
+    public QuizData Serialize()
+    {
+        var ret = new QuizData();
+        foreach(var tgt in mNPCs)
+        {
+            ret.mBoolData.Add(tgt.isActive);
+        }
+        ret.mBoolData.Add(isResolved);
+        ret.mBoolData.Add(mPictureHold == null);
+        return ret;
+    }
+
+    public void Deserialize(QuizData data)
+    {
+        int idx = 0;
+        for (; idx < mNPCs.Count; idx++)
+        {
+            mNPCs[idx].isActive = data.mBoolData[idx];
+        }
+        if (data.mBoolData[idx++])
+        {
+            mRelatedSceneObj.GetComponent<SceneObj>().QuizResolved();
+        }
+        if (data.mBoolData[idx++])
+        {
+            mPictureHold = null;
+        }
     }
 }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class QuizWire : MonoBehaviour, ICapturable
+public class QuizWire : MonoBehaviour, ICapturable, IQuizSerializable
 {
     public List<GameObject> mBtns = new List<GameObject>();
 
@@ -73,6 +73,28 @@ public class QuizWire : MonoBehaviour, ICapturable
     {
         Debug.Assert(this.transform.parent.gameObject.name.Contains("Scene"));
         return this.transform.parent.gameObject;
+    }
+
+    public QuizData Serialize()
+    {
+        var ret = new QuizData();
+        foreach(var key in mSpVSPic.Keys)
+        {
+            ret.mBoolData.Add(mSpVSPic[key] == null);
+        }
+        return ret;
+    }
+
+    public void Deserialize(QuizData data)
+    {
+        int idx = 0;
+        foreach(var key in mSpVSPic.Keys)
+        {
+            if (data.mBoolData[idx++])
+            {
+                mSpVSPic[key] = null;
+            }
+        }
     }
 }
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Common;
 
-public class Quiz4Locks : MonoBehaviour
+public class Quiz4Locks : MonoBehaviour, IQuizSerializable
 {
     public string mInitalCode1;
     public string mInitalCode2;
@@ -97,13 +97,23 @@ public class Quiz4Locks : MonoBehaviour
         
         if(CatAns(mLock1) == mAnsCode1)
         {
+            mPhase = 1;
+        }
+
+        if(CatAns(mLock2) == mAnsCode2)
+        {
+            mPhase = 2;
+        }
+
+        if(mPhase == 1)
+        {
             // make sure it'll be only moved one time
             if (mBonus1.activeSelf == true) FindObjectOfType<ItemsBox>().MoveItemIn(piece1);
             mBonus1.SetActive(false);
             mBonus2.SetActive(true);
         }
 
-        if(CatAns(mLock2) == mAnsCode2)
+        if(mPhase == 2)
         {
             //mBonus2.SetActive(true);
             FindObjectOfType<ItemsBox>().MoveItemIn(piece2);
@@ -134,5 +144,18 @@ public class Quiz4Locks : MonoBehaviour
             ret += code.num.ToString();
         }
         return ret;
+    }
+
+    private int mPhase = 0;
+    public QuizData Serialize()
+    {
+        var ret = new QuizData();
+        ret.mIntData.Add(mPhase);
+        return ret;
+    }
+
+    public void Deserialize(QuizData data)
+    {
+        mPhase = data.mIntData[0];
     }
 }

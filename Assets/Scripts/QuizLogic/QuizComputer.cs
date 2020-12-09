@@ -2,16 +2,43 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class QuizComputer : MonoBehaviour
+public class QuizComputer : MonoBehaviour, IQuizSerializable
 {
     public GameObject ItemIdCard;
-    public int mPhase;
+    public int mPhase = 0;
     public List<Sprite> mSps = new List<Sprite>();
     private ItemsBox itemsBox;
+
+
+    public QuizData Serialize()
+    {
+        var ret = new QuizData();
+        ret.mIntData.Add(mPhase);
+        
+        var inventory = this.GetComponent<QuizReception>().GetItems();
+        Debug.Assert(inventory != null);
+        foreach(var obj in inventory)
+        {
+            ret.mStringData.Add(obj.name);
+        }
+        return ret;
+    }
+    public void Deserialize(QuizData data)
+    {
+        mPhase = data.mIntData[0];
+
+        var inventory = this.GetComponent<QuizReception>();
+        Debug.Assert(inventory != null);
+        foreach(var objName in data.mStringData)
+        {
+            var fakeItem = new GameObject(objName);
+            inventory.AddItem(fakeItem);
+        }
+    }
+
     // Start is called before the first frame update
     void Start()
     {
-        mPhase = 0;
         itemsBox = FindObjectOfType<ItemsBox>();
     }
 
