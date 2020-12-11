@@ -18,8 +18,8 @@ public class QuizCamera : MonoBehaviour, IQuizSerializable
     public List<Sprite> mInventory = new List<Sprite>();
     public List<Sprite> mReceivedPic = new List<Sprite>();
     public Sprite mSpBackGournd;
-    public int mScreenWidth;
-    public int mScreenHeight;
+    public int mScreenWidth = 0;
+    public int mScreenHeight = 0;
     public bool isGrab = true;
     public ItemCamera mItemCamera;
     private List<ICapturable> mCapturable = new List<ICapturable>();
@@ -142,8 +142,12 @@ public class QuizCamera : MonoBehaviour, IQuizSerializable
 
     public void Deserialize(QuizData data)
     {
+        mSpR = this.transform.Find("Screen").GetComponent<SpriteRenderer>();
+        mScreenWidth = mSpR.sprite.texture.width;
+        mScreenHeight = mSpR.sprite.texture.height;
         foreach(var s in data.mStringData)
         {
+            Debug.Log("Camera Load Pic : " + s);
             var sp = Resources.Load<Sprite>(s);;
             var newTx = Instantiate(sp.texture);
             TextureScale.Bilinear(newTx, mScreenWidth, mScreenHeight);

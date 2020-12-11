@@ -22,6 +22,7 @@ public class Persist : MonoBehaviour
         public int objCarried;
         public bool mKeephAfterUse;
         public bool mCarriedSelf;
+        public string name;
         public TYPE_ITEM mType;
         [System.NonSerialized]
         public GameObject prefab;
@@ -29,7 +30,7 @@ public class Persist : MonoBehaviour
         public SerializedItem(
             string picIdle, string picPicked, int objToGive, 
             int objToGive2, int objCarried, bool mKeephAfterUse,
-            bool mCarriedSelf, TYPE_ITEM mType = TYPE_ITEM.NORMAL)
+            bool mCarriedSelf, string name, TYPE_ITEM mType = TYPE_ITEM.NORMAL)
         {
             this.picIdle = picIdle;
             this.picPicked = picPicked;
@@ -38,6 +39,7 @@ public class Persist : MonoBehaviour
             this.objCarried = objCarried;
             this.mKeephAfterUse = mKeephAfterUse;
             this.mCarriedSelf = mCarriedSelf;
+            this.name = name;
             this.mType = mType;
         }
     }
@@ -137,6 +139,7 @@ public class Persist : MonoBehaviour
                                             carried,
                                             it.mKeephAfterUse,
                                             carriedSelf,
+                                            it.gameObject.name,
                                             type
                                             ));
     }
@@ -216,12 +219,14 @@ public class Persist : MonoBehaviour
             {
                 case TYPE_ITEM.NORMAL:
                     obj = Instantiate(ItemPrefab);
+                    obj.name = item.name;
                     it = obj.GetComponent<Item>();
                     CopyItem(it, item);
                     itemsBox.MoveItemIn(obj, true);
                     break;
                 case TYPE_ITEM.CAMERA:
                     it = ItemCamera.GetComponent<Item>();
+                    it.name = item.name;
                     CopyItem(it, item);
                     itemsBox.MoveItemIn(ItemCamera, true);
                     break;

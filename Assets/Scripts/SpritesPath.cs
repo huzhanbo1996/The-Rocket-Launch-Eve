@@ -16,6 +16,15 @@ public class SpritesPath : MonoBehaviour
         SpriteVSPath.Clear();
         for (int idx = 0; idx < AllSp.Count;idx++)
         {
+            if (SpriteVSPath.ContainsKey(AllSp[idx]))
+            {
+                if(SpriteVSPath[AllSp[idx]] != AllSpName[idx])
+                {
+                    Debug.LogError("Sprite resource path inconsistent : " + AllSp[idx].ToString()
+                        + " : " + SpriteVSPath[AllSp[idx]] + " : " + AllSpName[idx]);
+                }
+                continue;
+            }
             SpriteVSPath.Add(AllSp[idx], AllSpName[idx]);
         }
     }
