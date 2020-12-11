@@ -41,6 +41,7 @@ public class Persist : MonoBehaviour
             this.mType = mType;
         }
     }
+    public SpritesPath mSpritePath;
     public GameObject ItemPrefab;
     public GameObject ItemCamera;
     [System.Serializable]
@@ -61,6 +62,7 @@ public class Persist : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        mSpritePath = GetComponent<SpritesPath>();
         var mSE = FindObjectOfType<SoundEffect>();
         mSE.enable = false;
         RegistGameobject();
@@ -125,7 +127,7 @@ public class Persist : MonoBehaviour
         int obj1 = it.objToGive == null ? -1 : mOBJVSUid[it.objToGive];
         int obj2 = it.objToGive2 == null ? -1 : mOBJVSUid[it.objToGive2];
         bool carriedSelf = it.objCarried == it.gameObject;
-        string picIdle = GetResourcePath(it.picIdle);
+        string picIdle = mSpritePath.SpriteVSPath[it.picIdle];
         TYPE_ITEM type = it.gameObject.GetComponent<ItemCamera>() == null ? TYPE_ITEM.NORMAL : TYPE_ITEM.CAMERA;
         mData.mGotItems.Add(new SerializedItem(
                                             picIdle,
@@ -143,7 +145,7 @@ public class Persist : MonoBehaviour
     {
         for (int idx = 0; idx < mData.mGotItems.Count; idx++)
         {
-            if (mData.mGotItems[idx].picIdle == GetResourcePath(it))
+            if (mData.mGotItems[idx].picIdle == mSpritePath.SpriteVSPath[it])
             {
                 mData.mGotItems.RemoveAt(idx);
                 return; // only remove the first found
@@ -152,11 +154,7 @@ public class Persist : MonoBehaviour
     }
     public string GetResourcePath(Sprite obj)
     {
-        var ret = AssetDatabase.GetAssetPath(obj);
-        Debug.Assert(ret.IndexOf("Assets/Resources/") >= 0);
-        ret = new string(ret.Skip("Assets/Resources/".Length).ToArray());
-        ret = ret.Split('.')[0];
-        return ret;
+        return mSpritePath.SpriteVSPath[obj];
     }
     private void CopyItem(Item dest, SerializedItem orig)
     {

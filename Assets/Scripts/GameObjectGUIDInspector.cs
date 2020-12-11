@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEditor;
 using System;
 
+#if UNITY_EDITOR
 [CustomEditor(typeof(GameObjectGUID))]
 public class GameObjectGUIDInspector : Editor
 {
@@ -35,3 +36,4 @@ public class GameObjectGUIDInspector : Editor
         }
     }
 }
+#endif

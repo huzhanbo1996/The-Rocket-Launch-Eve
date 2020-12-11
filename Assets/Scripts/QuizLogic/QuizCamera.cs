@@ -134,7 +134,8 @@ public class QuizCamera : MonoBehaviour, IQuizSerializable
         var ret = new QuizData();
         foreach(var pic in mReceivedPic)
         {
-            ret.mStringData.Add(FindObjectOfType<Persist>().GetResourcePath(pic));
+            var s = FindObjectOfType<Persist>().mSpritePath.SpriteVSPath[pic];
+            ret.mStringData.Add(s);
         }
         return ret;
     }
@@ -143,7 +144,7 @@ public class QuizCamera : MonoBehaviour, IQuizSerializable
     {
         foreach(var s in data.mStringData)
         {
-            var sp = Resources.Load<Sprite>(s);
+            var sp = Resources.Load<Sprite>(s);;
             var newTx = Instantiate(sp.texture);
             TextureScale.Bilinear(newTx, mScreenWidth, mScreenHeight);
             var newSp = Sprite.Create(newTx, new Rect(0, 0, mScreenWidth, mScreenHeight), new Vector2(0, 0));

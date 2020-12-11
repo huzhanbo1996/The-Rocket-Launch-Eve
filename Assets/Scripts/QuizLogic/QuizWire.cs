@@ -8,7 +8,7 @@ public class QuizWire : MonoBehaviour, ICapturable, IQuizSerializable
 
     private SpriteRenderer mSpR;
     private Dictionary<GameObject, Sprite> mBtnVSSp = new Dictionary<GameObject, Sprite>();
-    private Dictionary<Sprite, Sprite> mSpVSPic = new Dictionary<Sprite, Sprite>();
+    public Dictionary<Sprite, Sprite> mSpVSPic = new Dictionary<Sprite, Sprite>();
     private string RESOURCES_PATH = "QuizWire";
     private Sprite mCurrSp;
     private QuizReception mQuizReception;
