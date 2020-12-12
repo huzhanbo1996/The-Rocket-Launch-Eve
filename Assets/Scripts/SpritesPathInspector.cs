@@ -35,11 +35,11 @@ public class SpritesPathInspector : Editor
         }
 
         var quizWire = Resources.FindObjectsOfTypeAll<QuizWire>()[0];
-        foreach (var sp in quizWire.mSpVSPic.Values)
+        foreach (var pair in quizWire.mPicVSPath)
         {
-            if (sp == null || spritesPath.SpriteVSPath.ContainsKey(sp)) continue;
-            spritesPath.AllSp.Add(sp);
-            spritesPath.AllSpName.Add(GetResourcePath(sp));
+            if (spritesPath.SpriteVSPath.ContainsKey(pair.Key)) continue;
+            spritesPath.AllSp.Add(pair.Key);
+            spritesPath.AllSpName.Add(pair.Value);
         }
 
         var quiz4NPC = Resources.FindObjectsOfTypeAll<Quiz4NPC>()[0];
@@ -53,7 +53,7 @@ public class SpritesPathInspector : Editor
         if (quizMirror.mPic != null && !spritesPath.SpriteVSPath.ContainsKey(quizMirror.mPic))
         {
             spritesPath.AllSp.Add(quizMirror.mPic);
-spritesPath.AllSpName.Add( GetResourcePath(quizMirror.mPic));
+            spritesPath.AllSpName.Add(GetResourcePath(quizMirror.mPic));
         }
 
         foreach(var p in spritesPath.SpriteVSPath)

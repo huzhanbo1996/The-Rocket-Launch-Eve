@@ -50,7 +50,7 @@ public class QuizHuaRong : MonoBehaviour, IQuizSerializable
         };
     private const string RESOURCES_PATH = "QuizHuarong";
 
-    private QuizData mPersistData = null;
+    // private QuizData mPersistData = null;
     private bool mIsResolved = false;
     public QuizData Serialize()
     {
