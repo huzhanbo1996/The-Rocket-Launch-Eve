@@ -9773,7 +9773,7 @@ PrefabInstance:
     - target: {fileID: 6896886245615546775, guid: c931d22119ad10a43ba4c7f471cd1d0e,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6896886245615546775, guid: c931d22119ad10a43ba4c7f471cd1d0e,
         type: 3}
@@ -11510,6 +11510,7 @@ MonoBehaviour:
   ItemCamera: {fileID: 1787836820}
   ItemCash: {fileID: 558649942}
   ItemMagnet: {fileID: 26174965}
+  ItemCoin: {fileID: 1885431224}
 --- !u!114 &519420042
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27826,7 +27827,7 @@ PrefabInstance:
     - target: {fileID: 6112173297942248560, guid: bdc94d9d7196a2e459898b008173c105,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6112173297942248560, guid: bdc94d9d7196a2e459898b008173c105,
         type: 3}

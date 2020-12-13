@@ -17,9 +17,10 @@ public class QuizVendingMachine : MonoBehaviour, IQuizSerializable
 
         var quizReception = this.transform.Find("Area").GetComponent<QuizReception>();
         Debug.Assert(quizReception != null);
-        for (; idx < data.mIntData.Count; idx++)
+        for (idx = 0; idx < data.mStringData.Count; idx++)
         {
-            quizReception.GetRefuse().Add(FindObjectOfType<Persist>().UidVSOBJ[data.mIntData[idx]]);
+            var fakeItem = new GameObject(data.mStringData[idx]);
+            quizReception.GetRefuse().Add(fakeItem);
         }
     }
 
@@ -32,7 +33,8 @@ public class QuizVendingMachine : MonoBehaviour, IQuizSerializable
         Debug.Assert(quizReception != null);
         foreach(var refuse in quizReception.GetRefuse())
         {
-            ret.mIntData.Add(FindObjectOfType<Persist>().OBJVSUid[refuse]);
+            ret.mStringData.Add(refuse.name);
+            // ret.mIntData.Add(FindObjectOfType<Persist>().OBJVSUid[refuse]);
         }
         return ret;
     }

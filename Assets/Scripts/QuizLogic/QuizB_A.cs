@@ -7,7 +7,7 @@ public class QuizB_A : MonoBehaviour, IQuizSerializable
     public GameObject mPieceBonus;
     public GameObject mAgreementBonus;
     private List<ShowName> mShowName;
-    private int cntReceived;
+    private int cntReceived = 0;
     private ItemsBox itemsBox;
     private QuizReception quizReception;
     private Ending mEnding;
@@ -18,7 +18,7 @@ public class QuizB_A : MonoBehaviour, IQuizSerializable
         ret.mIntData.Add(cntReceived);
         var quizReception = this.transform.Find("Area").GetComponent<QuizReception>();
         Debug.Assert(quizReception != null);
-        foreach(var obj in quizReception.GetItems())
+        foreach(var obj in quizReception.GetRefuse())
         {
             ret.mStringData.Add(obj.name);
         }
@@ -33,7 +33,7 @@ public class QuizB_A : MonoBehaviour, IQuizSerializable
         foreach(var objName in data.mStringData)
         {
             var fakeItem = new GameObject(objName);
-            quizReception.AddItem(fakeItem);
+            quizReception.GetRefuse().Add(fakeItem);
         }
     }
 
@@ -42,7 +42,7 @@ public class QuizB_A : MonoBehaviour, IQuizSerializable
     {
         mEnding = FindObjectOfType<Ending>();
         Debug.Assert(mEnding != null);
-        cntReceived = 0;
+        // cntReceived = 0;
         itemsBox = FindObjectOfType<ItemsBox>();
         quizReception = this.transform.Find("Area").GetComponent<QuizReception>();
         mShowName = new List<ShowName>(this.transform.Find("Area").GetComponents<ShowName>());

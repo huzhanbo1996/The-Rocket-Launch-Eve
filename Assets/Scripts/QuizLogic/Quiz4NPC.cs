@@ -80,13 +80,29 @@ public class Quiz4NPC : MonoBehaviour, ICapturable, IQuizSerializable
             }
         }
 
+        if(Common.Utils.ClickedOnChildenOf(this.gameObject))
+        {
+            var talkedCnt = 0;
+            foreach (var tgt in mNPCs)
+            {
+                if (tgt.talked && !tgt.isActive)
+                {
+                    talkedCnt++;
+                }
+            }
+            if (talkedCnt == 4)
+            {
+                mBigMsg.SetActive(true);
+            }
+        }
+
         foreach (var tgt in mNPCs)
         {
             if (Common.Utils.ClickedOn(tgt.obj))
             {
                 if (!tgt.isActive)  // initial state
                 {
-                    if (!tgt.msg.activeSelf)
+                    if (!tgt.msg.activeSelf && !mBigMsg.activeSelf)
                     {
                         ShowMsg(tgt.msg, mShowMsgTime);
                         tgt.talked = true;
@@ -114,22 +130,6 @@ public class Quiz4NPC : MonoBehaviour, ICapturable, IQuizSerializable
                         }
                     } 
                 }
-            }
-        }
-
-        if(Common.Utils.ClickedOnChildenOf(this.gameObject))
-        {
-            var talkedCnt = 0;
-            foreach (var tgt in mNPCs)
-            {
-                if (tgt.talked && !tgt.isActive)
-                {
-                    talkedCnt++;
-                }
-            }
-            if (talkedCnt == 4)
-            {
-                mBigMsg.SetActive(true);
             }
         }
 

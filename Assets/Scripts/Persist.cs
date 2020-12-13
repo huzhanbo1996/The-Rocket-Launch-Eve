@@ -48,6 +48,7 @@ public class Persist : MonoBehaviour
     public GameObject ItemCamera;
     public GameObject ItemCash;
     public GameObject ItemMagnet;
+    public GameObject ItemCoin;
     [System.Serializable]
     class SerilaizationData
     {
@@ -136,6 +137,7 @@ public class Persist : MonoBehaviour
         if (it.gameObject.GetComponent<ItemCamera>() != null) type = TYPE_ITEM.CAMERA;
         if (it.gameObject.GetComponent<ItemCash>() != null) type = TYPE_ITEM.CASH;
         if (it.gameObject.GetComponent<Item>().objCarried == ItemMagnet) type = TYPE_ITEM.MAGNET;
+        if (it.gameObject.GetComponent<Item>().objCarried == ItemCoin) type = TYPE_ITEM.COIN;
         mData.mGotItems.Add(new SerializedItem(
                                             picIdle,
                                             "",
@@ -166,9 +168,9 @@ public class Persist : MonoBehaviour
     }
     private void CopyItem(Item dest, SerializedItem orig)
     {
-        Debug.Log(orig.picIdle);
+        // Debug.Log(orig.picIdle);
         dest.picIdle = Resources.Load<Sprite>(orig.picIdle);
-        Debug.Log(dest.picIdle);
+        // Debug.Log(dest.picIdle);
         dest.picPicked = null;
         dest.objToGive = mUidVSOBJ[orig.objToGive];
         dest.objToGive2 = mUidVSOBJ[orig.objToGive2];
@@ -241,6 +243,9 @@ public class Persist : MonoBehaviour
                     break;
                 case TYPE_ITEM.MAGNET:
                     itemsBox.MoveItemIn(ItemMagnet, true);
+                    break;
+                case TYPE_ITEM.COIN:
+                    itemsBox.MoveItemIn(ItemCoin, true);
                     break;
             }
             
