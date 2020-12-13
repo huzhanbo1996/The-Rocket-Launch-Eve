@@ -11,7 +11,7 @@ using System.Linq;
 
 public class Persist : MonoBehaviour
 {
-    enum TYPE_ITEM { NORMAL, CAMERA, CASH}
+    enum TYPE_ITEM { NORMAL, CAMERA, CASH, MAGNET, COIN}
     [System.Serializable]
     class SerializedItem
     {
@@ -47,6 +47,7 @@ public class Persist : MonoBehaviour
     public GameObject ItemPrefab;
     public GameObject ItemCamera;
     public GameObject ItemCash;
+    public GameObject ItemMagnet;
     [System.Serializable]
     class SerilaizationData
     {
@@ -134,6 +135,7 @@ public class Persist : MonoBehaviour
         TYPE_ITEM type = TYPE_ITEM.NORMAL;
         if (it.gameObject.GetComponent<ItemCamera>() != null) type = TYPE_ITEM.CAMERA;
         if (it.gameObject.GetComponent<ItemCash>() != null) type = TYPE_ITEM.CASH;
+        if (it.gameObject.GetComponent<Item>().objCarried == ItemMagnet) type = TYPE_ITEM.MAGNET;
         mData.mGotItems.Add(new SerializedItem(
                                             picIdle,
                                             "",
@@ -237,6 +239,9 @@ public class Persist : MonoBehaviour
                     it = ItemCash.GetComponent<Item>();
                     itemsBox.MoveItemIn(ItemCash, true);
                     break;
+                case TYPE_ITEM.MAGNET:
+                    itemsBox.MoveItemIn(ItemMagnet, true);
+                    break;
             }
             
         }
@@ -248,6 +253,7 @@ public class Persist : MonoBehaviour
     private void RegistQuiz()
     {
         mQuiz.AddRange(Resources.FindObjectsOfTypeAll<QuizHuaRong>());
+        mQuiz.AddRange(Resources.FindObjectsOfTypeAll<SamplePick>());
         mQuiz.Add(Resources.FindObjectsOfTypeAll<Quiz4Locks>()[0]);
         mQuiz.Add(Resources.FindObjectsOfTypeAll<Quiz4NPC>()[0]);
         mQuiz.Add(Resources.FindObjectsOfTypeAll<Quiz9Puzzle>()[0]);
