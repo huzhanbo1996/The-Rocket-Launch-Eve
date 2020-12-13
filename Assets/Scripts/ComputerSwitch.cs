@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class ComputerSwitch : MonoBehaviour, IQuizSerializable
 {
-    public int mStage;
-    public bool isResolve;
+    public int mStage  = 0;
+    public bool isResolve = false;
 
     public GameObject mQuizComputer;
     public GameObject mQuizRotate;
@@ -25,9 +25,9 @@ public class ComputerSwitch : MonoBehaviour, IQuizSerializable
     {
         mSpR = this.GetComponent<SpriteRenderer>();
         mSceneObj = this.GetComponent<SceneObj>();
-        mStage = 0;
-        isResolve = false;
-        mSceneObj.relatedQuiz = mQuizComputer;
+        // mStage = 0;
+        // isResolve = false;
+        // mSceneObj.relatedQuiz = mQuizComputer;
     }
 
     // Update is called once per frame

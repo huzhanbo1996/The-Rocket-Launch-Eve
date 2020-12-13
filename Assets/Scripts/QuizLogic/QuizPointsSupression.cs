@@ -107,7 +107,7 @@ public class QuizPointsSupression : MonoBehaviour, IQuizSerializable
         }
         Debug.Log("mSps" + mSps.Count.ToString());
         Clear();
-        Set(1);
+        Set(mStage);
     }
 
     // Update is called once per frame

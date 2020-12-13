@@ -11,7 +11,7 @@ using System.Linq;
 
 public class Persist : MonoBehaviour
 {
-    enum TYPE_ITEM { NORMAL, CAMERA}
+    enum TYPE_ITEM { NORMAL, CAMERA, CASH}
     [System.Serializable]
     class SerializedItem
     {
@@ -46,6 +46,7 @@ public class Persist : MonoBehaviour
     public SpritesPath mSpritePath;
     public GameObject ItemPrefab;
     public GameObject ItemCamera;
+    public GameObject ItemCash;
     [System.Serializable]
     class SerilaizationData
     {
@@ -130,7 +131,9 @@ public class Persist : MonoBehaviour
         int obj2 = it.objToGive2 == null ? -1 : mOBJVSUid[it.objToGive2];
         bool carriedSelf = it.objCarried == it.gameObject;
         string picIdle = mSpritePath.SpriteVSPath[it.picIdle];
-        TYPE_ITEM type = it.gameObject.GetComponent<ItemCamera>() == null ? TYPE_ITEM.NORMAL : TYPE_ITEM.CAMERA;
+        TYPE_ITEM type = TYPE_ITEM.NORMAL;
+        if (it.gameObject.GetComponent<ItemCamera>() != null) type = TYPE_ITEM.CAMERA;
+        if (it.gameObject.GetComponent<ItemCash>() != null) type = TYPE_ITEM.CASH;
         mData.mGotItems.Add(new SerializedItem(
                                             picIdle,
                                             "",
@@ -229,6 +232,10 @@ public class Persist : MonoBehaviour
                     it.name = item.name;
                     CopyItem(it, item);
                     itemsBox.MoveItemIn(ItemCamera, true);
+                    break;
+                case TYPE_ITEM.CASH:
+                    it = ItemCash.GetComponent<Item>();
+                    itemsBox.MoveItemIn(ItemCash, true);
                     break;
             }
             
