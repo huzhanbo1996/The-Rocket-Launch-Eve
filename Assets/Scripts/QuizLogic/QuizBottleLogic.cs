@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Common;
 
-public class QuizBottleLogic : MonoBehaviour
+public class QuizBottleLogic : MonoBehaviour, IQuizSerializable
 {
     public List<GameObject> mButtoms = new List<GameObject>();
     public List<GameObject> mAnsOrder = new List<GameObject>();
@@ -12,7 +12,7 @@ public class QuizBottleLogic : MonoBehaviour
     public GameObject mBandPrefab;
     public GameObject mSceneObj;
     public GameObject mItemBeer;
-    public bool mResolved;
+    public bool mResolved = false;
 
     private QuizReception mQuizReception;
     private string mResourcePath = "QuizBottle";
@@ -24,7 +24,7 @@ public class QuizBottleLogic : MonoBehaviour
     void Start()
     {
         mQuizReception = this.transform.Find("Area").GetComponent<QuizReception>();
-        mResolved = false;
+        // mResolved = false;
         mCurrPosition = mButtun = mButtunLine.transform.localPosition;
         foreach(var buttom in mButtoms)
         {
@@ -117,5 +117,17 @@ public class QuizBottleLogic : MonoBehaviour
                 //mSceneObj.GetComponent<SceneObj>().QuizResolved();
             }
         }
+    }
+
+    public QuizData Serialize()
+    {
+        var ret = new QuizData();
+        ret.mBoolData.Add(mResolved);
+        return ret;
+    }
+
+    public void Deserialize(QuizData data)
+    {
+        mResolved = data.mBoolData[0];
     }
 }

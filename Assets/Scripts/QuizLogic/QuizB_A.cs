@@ -2,21 +2,47 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class QuizB_A : MonoBehaviour
+public class QuizB_A : MonoBehaviour, IQuizSerializable
 {
     public GameObject mPieceBonus;
     public GameObject mAgreementBonus;
     private List<ShowName> mShowName;
-    private int cntReceived;
+    private int cntReceived = 0;
     private ItemsBox itemsBox;
     private QuizReception quizReception;
     private Ending mEnding;
+
+    public QuizData Serialize()
+    {
+        var ret = new QuizData();
+        ret.mIntData.Add(cntReceived);
+        var quizReception = this.transform.Find("Area").GetComponent<QuizReception>();
+        Debug.Assert(quizReception != null);
+        foreach(var obj in quizReception.GetRefuse())
+        {
+            ret.mStringData.Add(obj.name);
+        }
+        return ret;
+    }
+
+    public void Deserialize(QuizData data)
+    {
+        cntReceived = data.mIntData[0];
+        var quizReception = this.transform.Find("Area").GetComponent<QuizReception>();
+        Debug.Assert(quizReception != null);
+        foreach(var objName in data.mStringData)
+        {
+            var fakeItem = new GameObject(objName);
+            quizReception.GetRefuse().Add(fakeItem);
+        }
+    }
+
     // Start is called before the first frame update
     void Start()
     {
         mEnding = FindObjectOfType<Ending>();
         Debug.Assert(mEnding != null);
-        cntReceived = 0;
+        // cntReceived = 0;
         itemsBox = FindObjectOfType<ItemsBox>();
         quizReception = this.transform.Find("Area").GetComponent<QuizReception>();
         mShowName = new List<ShowName>(this.transform.Find("Area").GetComponents<ShowName>());

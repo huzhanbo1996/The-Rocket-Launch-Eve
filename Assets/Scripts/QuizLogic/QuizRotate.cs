@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Common;
 
-public class QuizRotate : MonoBehaviour
+public class QuizRotate : MonoBehaviour, IQuizSerializable
 {
     // refer to https://docs.qq.com/doc/DRnNjR3N6eEJRY2dH
     public GameObject mButtomLeft;
@@ -18,11 +18,11 @@ public class QuizRotate : MonoBehaviour
     private List<KeyValuePair<GameObject,int>> mRotateGroupLeft = new List<KeyValuePair<GameObject, int>>();
     private List<KeyValuePair<GameObject,int>> mRotateGroupRight = new List<KeyValuePair<GameObject, int>>();
     private List<Vector3> mPosistions = new List<Vector3>();
-    public bool mResolved;
+    public bool mResolved = false;
     // Start is called before the first frame update
     void Start()
     {
-        mResolved = false;
+        // mResolved = false;
         foreach (var obj in mTargets)
         {
             mPosistions.Add(obj.transform.position);
@@ -99,5 +99,17 @@ public class QuizRotate : MonoBehaviour
             Destroy(mButtomMiddle);
             Destroy(mButtomRight);
         }
+    }
+
+    public QuizData Serialize()
+    {
+        var ret = new QuizData();
+        ret.mBoolData.Add(mResolved);
+        return ret;
+    }
+
+    public void Deserialize(QuizData data)
+    {
+        mResolved = data.mBoolData[0];
     }
 }

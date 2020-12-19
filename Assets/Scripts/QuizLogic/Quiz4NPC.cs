@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Common;
 
-public class Quiz4NPC : MonoBehaviour, ICapturable
+public class Quiz4NPC : MonoBehaviour, ICapturable, IQuizSerializable
 {
     public List<GameObject> mNPCinOrder;
     public List<GameObject> mSecMsg;
@@ -18,7 +18,6 @@ public class Quiz4NPC : MonoBehaviour, ICapturable
     private string mNowOrder;
     private QuizReception mQuizReception;
     private List<NPC> mNPCs = new List<NPC>();
-    private LayerMask tmpLayer;
     private class NPC
     {
         public GameObject obj;
@@ -41,13 +40,14 @@ public class Quiz4NPC : MonoBehaviour, ICapturable
         }
     }
 
+    private bool isResolved = false;
     // Start is called before the first frame update
     void Start()
     {
-        mBigMsg2.SetActive(false);
-        mBigMsg.SetActive(false);
-        tmpLayer = -1;
+        // mBigMsg2.SetActive(false);
+        // mBigMsg.SetActive(false);
         mQuizReception = this.transform.Find("Area").GetComponent<QuizReception>();
+        if (mNPCs.Count != 0) return;
         for (int i = 0; i < mNPCinOrder.Count; i++)
         {
             var obj = mNPCinOrder[i];
@@ -59,25 +59,9 @@ public class Quiz4NPC : MonoBehaviour, ICapturable
     void Update()
     {
 
+        if (isResolved) return;
         // don't render then, just for knowing them received
         var invenotory = mQuizReception.GetItems();
-
-        if(Common.Utils.ClickedOnChildenOf(this.gameObject))
-        {
-            var talkedCnt = 0;
-            foreach (var tgt in mNPCs)
-            {
-                if (tgt.talked && !tgt.isActive)
-                {
-                    talkedCnt++;
-                }
-            }
-            if (talkedCnt == 4)
-            {
-                mBigMsg.SetActive(true);
-            }
-        }
-
         
         foreach (var obj in invenotory)
         {
@@ -96,13 +80,29 @@ public class Quiz4NPC : MonoBehaviour, ICapturable
             }
         }
 
+        if(Common.Utils.ClickedOnChildenOf(this.gameObject))
+        {
+            var talkedCnt = 0;
+            foreach (var tgt in mNPCs)
+            {
+                if (tgt.talked && !tgt.isActive)
+                {
+                    talkedCnt++;
+                }
+            }
+            if (talkedCnt == 4)
+            {
+                mBigMsg.SetActive(true);
+            }
+        }
+
         foreach (var tgt in mNPCs)
         {
             if (Common.Utils.ClickedOn(tgt.obj))
             {
                 if (!tgt.isActive)  // initial state
                 {
-                    if (!tgt.msg.activeSelf)
+                    if (!tgt.msg.activeSelf && !mBigMsg.activeSelf)
                     {
                         ShowMsg(tgt.msg, mShowMsgTime);
                         tgt.talked = true;
@@ -140,9 +140,9 @@ public class Quiz4NPC : MonoBehaviour, ICapturable
                 mBigMsg2.SetActive(true);
             }
         }
-        if (mNowOrder == mAnsOrder && tmpLayer == -1)
+        if (mNowOrder == mAnsOrder)
         {
-            tmpLayer = Common.Utils.GetActiveLayer();
+            isResolved = true;
             Common.Utils.SetActive(false);
             Ending();
         }
@@ -215,13 +215,59 @@ public class Quiz4NPC : MonoBehaviour, ICapturable
         yield return new WaitForSeconds(delay1);
         Common.Utils.SetActive(true);
         FindObjectOfType<ItemsBox>().MoveItemIn(mItemBonus);
+        FindObjectOfType<Persist>().AddDestroy(mRelatedSceneObj);
         mRelatedSceneObj.GetComponent<SceneObj>().QuizResolved();
     }
     private static IEnumerator DelayShowMsg(GameObject msg, float delay1, float delay2)
     {
+        // Debug.Log("delay show : "+msg.gameObject.name);
         yield return new WaitForSeconds(delay1);
         msg.SetActive(true);
         yield return new WaitForSeconds(delay2);
         msg.SetActive(false);
+    }
+
+    public QuizData Serialize()
+    {
+        if (mNPCs.Count == 0)
+        {
+            Start();
+        }
+        var ret = new QuizData();
+        foreach(var tgt in mNPCs)
+        {
+            ret.mBoolData.Add(tgt.isActive);
+        }
+        ret.mBoolData.Add(isResolved);
+        ret.mBoolData.Add(mPictureHold == null);
+        // Debug.Log("========== 4NPC save =========");
+        // foreach(var b in ret.mBoolData)
+        // Debug.Log(b);
+        // Debug.Log("==============================");
+        return ret;
+    }
+
+    public void Deserialize(QuizData data)
+    {
+        if (mNPCs.Count == 0)
+        {
+            Start();
+        }
+        int idx = 0;
+        for (; idx < mNPCs.Count; idx++)
+        {
+            mNPCs[idx].isActive = data.mBoolData[idx];
+        }
+        Debug.Log(idx);
+        isResolved = data.mBoolData[idx++];
+        if (data.mBoolData[idx++])
+        {
+            Debug.Log("Set null");
+            mPictureHold = null;
+        }
+        // Debug.Log("========== 4NPC load =========");
+        // foreach(var b in data.mBoolData)
+        // Debug.Log(b);
+        // Debug.Log("================================");
     }
 }

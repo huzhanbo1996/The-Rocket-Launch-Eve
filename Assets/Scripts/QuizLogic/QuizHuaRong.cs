@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class QuizHuaRong : MonoBehaviour
+public class QuizHuaRong : MonoBehaviour, IQuizSerializable
 {
     public float pixPerUnit = 100.0f;
     public GameObject mPiecePrefab;
@@ -49,9 +49,33 @@ public class QuizHuaRong : MonoBehaviour
             new int[]{0, 0, 0, 0 , 0, 0 }
         };
     private const string RESOURCES_PATH = "QuizHuarong";
+
+    // private QuizData mPersistData = null;
+    private bool mIsResolved = false;
+    public QuizData Serialize()
+    {
+        var ret = new QuizData();
+        ret.mIntData.Add(mIsResolved ? 1 : 0);
+        return ret;
+    }
+    public void Deserialize(QuizData data)
+    {
+        // mPersistData = data;
+        mIsResolved = data.mIntData[0] == 1;
+
+        if (mIsResolved && !mObjTOGive.activeSelf)
+        {
+            mObjTOGive.SetActive(true);
+            FindObjectOfType<SoundEffect>().Play(SoundEffect.SOUND_TYPE.QUIZ);
+            //mItemsBox.MoveItemIn(mObjTOGive);
+            mSceneObj.GetComponent<SceneObj>().QuizResolved();
+        }
+    }
+
     // Start is called before the first frame update
     void Start()
     {
+        // mIsResolved = mPersistData != null && mPersistData.mIntData[0] == 1;
         mItemsBox = FindObjectOfType<ItemsBox>();
         string[] rsName = { "1x3", "1x2", "3x1", "2x1", "target"};
         foreach(var name in rsName)
@@ -74,6 +98,14 @@ public class QuizHuaRong : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (mIsResolved && !mObjTOGive.activeSelf)
+        {
+            mObjTOGive.SetActive(true);
+            FindObjectOfType<SoundEffect>().Play(SoundEffect.SOUND_TYPE.QUIZ);
+            //mItemsBox.MoveItemIn(mObjTOGive);
+            mSceneObj.GetComponent<SceneObj>().QuizResolved();
+        }
+
         // update table
         ClearTable();
         foreach (var piece in mPieces)
@@ -118,10 +150,7 @@ public class QuizHuaRong : MonoBehaviour
             // check ans
             if(piece.isSp && piece.position == mAnsPosition)
             {
-                mObjTOGive.SetActive(true);
-                FindObjectOfType<SoundEffect>().Play(SoundEffect.SOUND_TYPE.QUIZ);
-                //mItemsBox.MoveItemIn(mObjTOGive);
-                mSceneObj.GetComponent<SceneObj>().QuizResolved();
+                mIsResolved = true;
             }
         }
         if(Common.Utils.ClickedOn(mResetBtn))

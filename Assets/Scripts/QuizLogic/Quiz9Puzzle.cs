@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Common;
 
-public class Quiz9Puzzle : MonoBehaviour
+public class Quiz9Puzzle : MonoBehaviour, IQuizSerializable
 {
     public string mInitalOrder;
     public GameObject mBtnPrefab;
@@ -138,5 +138,17 @@ public class Quiz9Puzzle : MonoBehaviour
                 piece.obj.transform.localPosition.z
                 );
         }
+    }
+
+    public QuizData Serialize()
+    {
+        var ret = new QuizData();
+        ret.mBoolData.Add(isResolved);
+        return ret;
+    }
+
+    public void Deserialize(QuizData data)
+    {
+        isResolved = data.mBoolData[0];
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 //[ExecuteInEditMode]
-public class QuizPointsSupression : MonoBehaviour
+public class QuizPointsSupression : MonoBehaviour, IQuizSerializable
 {
     public float mZeroX;
     public float mZeroY;
@@ -14,7 +14,7 @@ public class QuizPointsSupression : MonoBehaviour
     public GameObject mBtnPrefab;
     public GameObject mLinePrefab;
     public List<Sprite> mSpArea;
-    public int mStage = 0;
+    public int mStage  = 1;
 
     private class Point
     {
@@ -94,7 +94,7 @@ public class QuizPointsSupression : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        mStage = 1;
+        // mStage = 1;
         int i;
         for (i = 0; i <= 6; i++)
         {
@@ -107,7 +107,7 @@ public class QuizPointsSupression : MonoBehaviour
         }
         Debug.Log("mSps" + mSps.Count.ToString());
         Clear();
-        Set(1);
+        Set(mStage);
     }
 
     // Update is called once per frame
@@ -266,5 +266,18 @@ public class QuizPointsSupression : MonoBehaviour
         obj.GetComponent<SpriteRenderer>().sprite = mSps[r];
         obj.transform.parent = this.transform;
         return new Point(obj, p, r);
+    }
+
+    public QuizData Serialize()
+    {
+        var ret = new QuizData();
+        ret.mIntData.Add(mStage);
+        return ret;
+    }
+
+    public void Deserialize(QuizData data)
+    {
+        mStage = data.mIntData[0];
+        
     }
 }

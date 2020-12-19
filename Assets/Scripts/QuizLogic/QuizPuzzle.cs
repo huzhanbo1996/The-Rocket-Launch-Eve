@@ -2,27 +2,77 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class QuizPuzzle : MonoBehaviour
+public class QuizPuzzle : MonoBehaviour, IQuizSerializable
 {
     public float mShortDistance;
     public GameObject mSceneObj;
-    public bool isSolved;
+    public bool isSolved = false;
     public GameObject mBonus;
     private QuizReception mQuizReception;
     private Dictionary<string, Vector3> mAnsPositions = new Dictionary<string, Vector3>();
     private int mAnsCnt;
     private int mStillNeedCnt;
     private Ending mEnding;
+
+    // TODO put pieces in the right position when quiz is already resolved
+    public void Deserialize(QuizData data)
+    {
+        isSolved = data.mBoolData[0];
+
+        var invenotory = this.transform.Find("Area").GetComponent<QuizReception>();
+        Debug.Assert(invenotory != null);
+        var childPieces = this.transform.Find("Pieces");
+        foreach(var pieceName in data.mStringData)
+        {
+            for (int idx = 0; idx < childPieces.childCount; idx++)
+            {
+                var piece = childPieces.GetChild(idx).gameObject;
+                if (pieceName.IndexOf(piece.name) >= 0)
+                {
+                    var cpy = Instantiate(piece);
+                    invenotory.AddItem(cpy);
+                }
+            }
+            
+        }
+
+        if(isSolved)
+        {
+            Start();
+            foreach (var piece in invenotory.GetItems())
+            {
+                piece.GetComponent<QuizPuzzlePiece>().freeze = true;
+                piece.transform.position = mAnsPositions[piece.name.Replace("(Clone)", "").Trim()];
+            }
+        }
+    }
+
+    public QuizData Serialize()
+    {
+        var ret = new QuizData();
+        ret.mBoolData.Add(isSolved);
+
+        var invenotory = this.transform.Find("Area").GetComponent<QuizReception>().GetItems();
+        Debug.Assert(invenotory != null);
+        foreach(var it in invenotory)
+        {
+            ret.mStringData.Add(Common.Utils.TrimClone(it.name));
+        }
+
+        return ret;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
-        isSolved = false;
+        // isSolved = false;
         mEnding = FindObjectOfType<Ending>();
         Debug.Assert(mEnding != null);
         mQuizReception = this.transform.Find("Area").GetComponent<QuizReception>();
         Debug.Assert(mQuizReception != null);
         var childPieces = this.transform.Find("Pieces");
         mStillNeedCnt = mAnsCnt = childPieces.childCount;
+        if (mAnsPositions.Count != 0) return;
         for (int i = 0; i < mAnsCnt; i++)
         {
             var piece = childPieces.GetChild(i).gameObject;

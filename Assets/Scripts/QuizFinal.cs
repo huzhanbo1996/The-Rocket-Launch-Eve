@@ -3,7 +3,7 @@ using System.Threading;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class QuizFinal : MonoBehaviour
+public class QuizFinal : MonoBehaviour, IQuizSerializable
 {
     public float mTimeDelay;
     public int mPhase = 0;
@@ -55,6 +55,7 @@ public class QuizFinal : MonoBehaviour
                     break;
                 }
             }
+            // wrong ans, give items back to player
             if (i != its.Count)
             {
                 foreach (var obj in its)
@@ -115,5 +116,31 @@ public class QuizFinal : MonoBehaviour
         Common.Utils.SetActive(true);
         mObjAdd.GetComponent<SpriteRenderer>().sprite = null;
         if (mPhase < mSpArea.Count) this.GetComponent<SpriteRenderer>().sprite = mSpArea[mPhase];
+    }
+
+    public QuizData Serialize()
+    {
+        var ret = new QuizData();
+
+        quizReception = this.GetComponent<QuizReception>();
+        Debug.Assert(quizReception != null);
+        foreach(var it in quizReception.GetItems())
+        {
+            ret.mIntData.Add(it.GetComponent<GameObjectGUID>().gameObjectID);
+            // ret.mIntData.Add(FindObjectOfType<Persist>().OBJVSUid[it]);
+        }
+        return ret;
+    }
+
+    // just give everything back to player 
+    public void Deserialize(QuizData data)
+    {
+        foreach(var uid in data.mIntData)
+        {
+            var it = FindObjectOfType<Persist>().UidVSOBJ[uid];
+            // Althought it's during persist, this giving back
+            // should be saved
+            FindObjectOfType<ItemsBox>().MoveItemIn(it);
+        }
     }
 }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class QuizElec : MonoBehaviour
+public class QuizElec : MonoBehaviour, IQuizSerializable
 {
  
     public GameObject relatedQuiz;
@@ -10,9 +10,9 @@ public class QuizElec : MonoBehaviour
     public List<Sprite> mSpScene;
     public List<Sprite> mSpQuizs;
 
-    public int mPhase;
-    private int mIdxSpScene;
-    private int mIdxSpQuiz;
+    public int mPhase = 0;
+    private int mIdxSpScene = 1;
+    private int mIdxSpQuiz = 1;
     private bool mNeedSetLayerMask;
     private ItemsBox itemsBox;
     private SpriteRenderer mSRender;
@@ -20,8 +20,8 @@ public class QuizElec : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        mPhase = 0;
-        mIdxSpScene = mIdxSpQuiz = 1;
+        // mPhase = 0;
+        // mIdxSpScene = mIdxSpQuiz = 1;
         mNeedSetLayerMask = false;
         Common.Utils.SetActiveLayer("Default");
         mSRender = this.GetComponent<SpriteRenderer>();
@@ -87,5 +87,29 @@ public class QuizElec : MonoBehaviour
     public void QuizResolved()
     {
         this.GetComponent<SpriteRenderer>().sprite = mSpScene[mIdxSpScene++];
+    }
+
+    public QuizData Serialize()
+    {
+        var ret = new QuizData();
+        ret.mIntData.Add(mPhase);
+        ret.mIntData.Add(mIdxSpQuiz);
+        ret.mIntData.Add(mIdxSpScene);
+        return ret;
+    }
+
+    public void Deserialize(QuizData data)
+    {
+        mPhase = data.mIntData[0];
+        mIdxSpQuiz = data.mIntData[1];
+        mIdxSpScene = data.mIntData[2];
+        if (mIdxSpQuiz > 0)
+        {
+            relatedQuiz.transform.Find("Area").GetComponent<SpriteRenderer>().sprite = mSpQuizs[mIdxSpQuiz - 1];
+        }
+        if (mIdxSpScene > 0)
+        {
+            this.GetComponent<SpriteRenderer>().sprite = mSpScene[mIdxSpScene - 1];
+        }
     }
 }

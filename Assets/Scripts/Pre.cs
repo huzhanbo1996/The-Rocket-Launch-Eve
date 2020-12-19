@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.IO;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Video;
@@ -49,6 +50,12 @@ public class Pre : MonoBehaviour
             if(Common.Utils.ClickedOn(mBtnNext))
             {
                 //BGM.Stop();
+                if (File.Exists(Application.persistentDataPath + "save.dat"))
+                {
+                    StartCoroutine(LoadYourAsyncScene());
+                    mBtnNext.SetActive(false);
+                    return;
+                }
                 mVP.Play();
                 StartCoroutine(Wait());
             }
