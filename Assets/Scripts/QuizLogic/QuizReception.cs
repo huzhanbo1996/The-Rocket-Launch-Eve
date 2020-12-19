@@ -33,6 +33,29 @@ public class QuizReception : MonoBehaviour
         }
     }
 
+    public void Init()
+    {
+        if (!mIsFake)
+        {
+            Transform area;
+            if(this.gameObject.name == "Area")
+            {
+                area = this.transform;
+            }
+            else
+            {
+                area = this.transform.Find("Area");
+            }
+            mArea = area.GetComponent<SpriteRenderer>().sprite.rect;
+            var mSpriteTextureRect = area.GetComponent<SpriteRenderer>().sprite.textureRect;
+            var mPixelsPerUnit = area.GetComponent<SpriteRenderer>().sprite.pixelsPerUnit;
+            var mSpriteCenter = area.position;
+            mArea.xMin = mSpriteCenter.x - mSpriteTextureRect.width / mPixelsPerUnit / 2.0f;
+            mArea.xMax = mSpriteCenter.x + mSpriteTextureRect.width / mPixelsPerUnit / 2.0f;
+            mArea.yMin = mSpriteCenter.y - mSpriteTextureRect.height / mPixelsPerUnit / 2.0f;
+            mArea.yMax = mSpriteCenter.y + mSpriteTextureRect.height / mPixelsPerUnit / 2.0f;
+        }
+    }
     // Update is called once per frame
     void Update()
     {
@@ -62,6 +85,7 @@ public class QuizReception : MonoBehaviour
         item.transform.parent = this.transform;
         if (!mIsFake)
         {
+            Init();
             item.transform.position = new Vector3(Random.Range(mArea.xMin, mArea.xMax),
                                                   Random.Range(mArea.yMin, mArea.yMax),
                                                   item.transform.position.z);

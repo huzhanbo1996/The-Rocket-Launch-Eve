@@ -126,7 +126,8 @@ public class QuizFinal : MonoBehaviour, IQuizSerializable
         Debug.Assert(quizReception != null);
         foreach(var it in quizReception.GetItems())
         {
-            ret.mIntData.Add(FindObjectOfType<Persist>().OBJVSUid[it]);
+            ret.mIntData.Add(it.GetComponent<GameObjectGUID>().gameObjectID);
+            // ret.mIntData.Add(FindObjectOfType<Persist>().OBJVSUid[it]);
         }
         return ret;
     }

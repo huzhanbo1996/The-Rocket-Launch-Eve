@@ -6,7 +6,7 @@ using Common;
 public class QuizPuzzlePiece : MonoBehaviour
 {
     public Transform area;
-    public bool freeze;
+    public bool freeze = false;
     public bool isMouseDown = false;
 
     //private Vector3 lastMousePosition = Vector3.zero;
@@ -25,7 +25,7 @@ public class QuizPuzzlePiece : MonoBehaviour
         mArea.yMin = mSpriteCenter.y - mSpriteTextureRect.height / mPixelsPerUnit / 2.0f;
         mArea.yMax = mSpriteCenter.y + mSpriteTextureRect.height / mPixelsPerUnit / 2.0f;
 
-        freeze = false;
+        // freeze = false;
     }
 
     // Update is called once per frame

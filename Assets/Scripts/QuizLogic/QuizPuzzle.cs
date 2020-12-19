@@ -21,9 +21,29 @@ public class QuizPuzzle : MonoBehaviour, IQuizSerializable
 
         var invenotory = this.transform.Find("Area").GetComponent<QuizReception>();
         Debug.Assert(invenotory != null);
-        foreach(var uid in data.mIntData)
+        var childPieces = this.transform.Find("Pieces");
+        foreach(var pieceName in data.mStringData)
         {
-            invenotory.AddItem(FindObjectOfType<Persist>().UidVSOBJ[uid]);
+            for (int idx = 0; idx < childPieces.childCount; idx++)
+            {
+                var piece = childPieces.GetChild(idx).gameObject;
+                if (pieceName.IndexOf(piece.name) >= 0)
+                {
+                    var cpy = Instantiate(piece);
+                    invenotory.AddItem(cpy);
+                }
+            }
+            
+        }
+
+        if(isSolved)
+        {
+            Start();
+            foreach (var piece in invenotory.GetItems())
+            {
+                piece.GetComponent<QuizPuzzlePiece>().freeze = true;
+                piece.transform.position = mAnsPositions[piece.name.Replace("(Clone)", "").Trim()];
+            }
         }
     }
 
@@ -36,7 +56,7 @@ public class QuizPuzzle : MonoBehaviour, IQuizSerializable
         Debug.Assert(invenotory != null);
         foreach(var it in invenotory)
         {
-            ret.mIntData.Add(FindObjectOfType<Persist>().OBJVSUid[it]);
+            ret.mStringData.Add(Common.Utils.TrimClone(it.name));
         }
 
         return ret;
@@ -52,6 +72,7 @@ public class QuizPuzzle : MonoBehaviour, IQuizSerializable
         Debug.Assert(mQuizReception != null);
         var childPieces = this.transform.Find("Pieces");
         mStillNeedCnt = mAnsCnt = childPieces.childCount;
+        if (mAnsPositions.Count != 0) return;
         for (int i = 0; i < mAnsCnt; i++)
         {
             var piece = childPieces.GetChild(i).gameObject;

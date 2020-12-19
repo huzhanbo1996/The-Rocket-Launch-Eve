@@ -17,7 +17,7 @@ public class QuizJuiceMachine : MonoBehaviour, IQuizSerializable
     // Start is called before the first frame update
     void Start()
     {
-        mSpVide = Instantiate(this.GetComponent<SpriteRenderer>().sprite);
+        // mSpVide = Instantiate(this.GetComponent<SpriteRenderer>().sprite);
         // mStGreen = STATE.HAS;
         // mStRed = STATE.HAS;
         mItemsBox = FindObjectOfType<ItemsBox>();
@@ -82,7 +82,8 @@ public class QuizJuiceMachine : MonoBehaviour, IQuizSerializable
         int idx = 0;
         mStRed = (STATE)data.mIntData[idx++];
         mStGreen = (STATE)data.mIntData[idx++];
-
+        if (mStRed == STATE.CAN_GIVE) this.GetComponent<SpriteRenderer>().sprite = mSpRed;
+        if (mStGreen == STATE.CAN_GIVE) this.GetComponent<SpriteRenderer>().sprite = mSpGreen;
         var inventory = this.GetComponent<QuizReception>();
         Debug.Assert(inventory != null);
         foreach(var objName in data.mStringData)

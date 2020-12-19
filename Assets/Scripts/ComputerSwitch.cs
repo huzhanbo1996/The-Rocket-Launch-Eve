@@ -115,5 +115,6 @@ public class ComputerSwitch : MonoBehaviour, IQuizSerializable
         mIsSetup = data.mBoolData[0];
         isResolve = data.mBoolData[1];
         mStage = data.mIntData[0];
+        if (isResolve) FindObjectOfType<LevelCtrl>().LevelUp();
     }
 }

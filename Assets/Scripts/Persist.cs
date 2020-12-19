@@ -11,7 +11,7 @@ using System.Linq;
 
 public class Persist : MonoBehaviour
 {
-    enum TYPE_ITEM { NORMAL, CAMERA, CASH, MAGNET, COIN}
+    enum TYPE_ITEM { NORMAL, CAMERA, CASH, MAGNET, COIN, MOONPIC, TICKET, AGREEMENT}
     [System.Serializable]
     class SerializedItem
     {
@@ -49,6 +49,9 @@ public class Persist : MonoBehaviour
     public GameObject ItemCash;
     public GameObject ItemMagnet;
     public GameObject ItemCoin;
+    public GameObject ItemMoonPic;
+    public GameObject ItemTicket;
+    public GameObject ItemAgreement;
     [System.Serializable]
     class SerilaizationData
     {
@@ -138,6 +141,9 @@ public class Persist : MonoBehaviour
         if (it.gameObject.GetComponent<ItemCash>() != null) type = TYPE_ITEM.CASH;
         if (it.gameObject.GetComponent<Item>().objCarried == ItemMagnet) type = TYPE_ITEM.MAGNET;
         if (it.gameObject.GetComponent<Item>().objCarried == ItemCoin) type = TYPE_ITEM.COIN;
+        if (it.gameObject.GetComponent<Item>().objCarried == ItemMoonPic) type = TYPE_ITEM.MOONPIC;
+        if (it.gameObject.GetComponent<Item>().objCarried == ItemTicket) type = TYPE_ITEM.TICKET;
+        if (it.gameObject.GetComponent<Item>().objCarried == ItemAgreement) type = TYPE_ITEM.AGREEMENT;
         mData.mGotItems.Add(new SerializedItem(
                                             picIdle,
                                             "",
@@ -247,6 +253,15 @@ public class Persist : MonoBehaviour
                 case TYPE_ITEM.COIN:
                     itemsBox.MoveItemIn(ItemCoin, true);
                     break;
+                case TYPE_ITEM.MOONPIC:
+                    itemsBox.MoveItemIn(ItemMoonPic, true);
+                    break;
+                case TYPE_ITEM.TICKET:
+                    itemsBox.MoveItemIn(ItemTicket, true);
+                    break;
+                case TYPE_ITEM.AGREEMENT:
+                    itemsBox.MoveItemIn(ItemAgreement, true);
+                    break;
             }
             
         }
@@ -275,7 +290,7 @@ public class Persist : MonoBehaviour
 
         mQuiz.Add(Resources.FindObjectsOfTypeAll<QuizCamera>()[0]);
         mQuiz.Add(Resources.FindObjectsOfTypeAll<LevelCtrl>()[0]);
-        mQuiz.Add(Resources.FindObjectsOfTypeAll<ComputerSwitch>()[0]);
+        mQuiz.Add(Resources.FindObjectsOfTypeAll<ComputerSwitch>()[0]); // should be always after LevelCtrl
         mQuiz.Add(Resources.FindObjectsOfTypeAll<QuizComputer>()[0]);
         mQuiz.Add(Resources.FindObjectsOfTypeAll<QuizPointsSupression>()[0]);
         mQuiz.Add(Resources.FindObjectsOfTypeAll<QuizRotate>()[0]);
